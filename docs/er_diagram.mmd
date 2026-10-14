@@ -1,0 +1,306 @@
+erDiagram
+    %% ==============================================================================
+    %% FINGUARD AI // PRODUCTION DATABASE ENTITY-RELATIONSHIP ARCHITECTURE
+    %% 16 Core Entities + 4 Supporting Ledgers (Fully Normalized 3NF / BCNF)
+    %% ==============================================================================
+
+    users ||--o| customers : "authenticates (user_id)"
+    users ||--o{ fraud_alerts : "assigned_to"
+    users ||--o{ fraud_cases : "investigates"
+    users ||--o{ case_notes : "authors"
+    users ||--o{ audit_logs : "triggers_mutation"
+    users ||--o{ login_history : "logs_attempt"
+
+    customers ||--|{ accounts : "owns"
+    customers ||--o{ customer_devices : "binds_hardware"
+    customers ||--o{ loans : "contracts"
+    customers ||--o{ customer_notifications : "receives_alert"
+    customers ||--o{ login_history : "customer_telemetry"
+
+    devices ||--o{ customer_devices : "bound_to_customer"
+    devices ||--o{ transactions : "initiates_hardware_signature"
+
+    accounts ||--o{ cards : "issues_payment_card"
+    accounts ||--o{ transactions : "originates_debit"
+    accounts ||--o{ loans : "servicing_ledger"
+    accounts ||--o{ customer_notifications : "related_account"
+
+    cards ||--o{ transactions : "executes_card_pos_ecom"
+
+    merchants ||--o{ transactions : "counterparty_settlement"
+    locations ||--o{ transactions : "geolocation_ip_anchor"
+    locations ||--o{ login_history : "access_origin"
+
+    transactions ||--|| risk_assessments : "generates_evaluation"
+    transactions ||--o| fraud_alerts : "triggers_operational_alert"
+    transactions ||--o{ customer_notifications : "triggers_push_notif"
+
+    risk_rules ||--o{ transaction_risk_factors : "rule_definition"
+    risk_assessments ||--o{ transaction_risk_factors : "explainability_breakdown"
+
+    fraud_alerts ||--o| fraud_cases : "escalates_into_case"
+
+    fraud_cases ||--o{ case_notes : "forensic_journal"
+    fraud_cases ||--o{ case_evidence : "pinned_artifacts"
+
+    loans ||--o{ loan_payments : "installments_repayment"
+
+    users {
+        TEXT id PK
+        VARCHAR username UK
+        VARCHAR email UK
+        VARCHAR password_hash
+        VARCHAR full_name
+        user_role role
+        VARCHAR badge_number UK
+        BOOLEAN is_active
+        TIMESTAMPTZ last_login_at
+        TIMESTAMPTZ created_at
+    }
+
+    customers {
+        TEXT id PK
+        TEXT user_id FK,UK
+        VARCHAR customer_code UK
+        VARCHAR first_name
+        VARCHAR last_name
+        VARCHAR email
+        VARCHAR phone_masked
+        VARCHAR phone_hash
+        VARCHAR pan_masked
+        kyc_status_enum kyc_status
+        VARCHAR risk_tier
+        TIMESTAMPTZ created_at
+    }
+
+    accounts {
+        TEXT id PK
+        TEXT customer_id FK
+        VARCHAR account_number_masked
+        VARCHAR account_hash UK
+        account_type_enum account_type
+        VARCHAR currency
+        NUMERIC balance
+        NUMERIC daily_limit
+        account_status_enum status
+        TIMESTAMPTZ opened_at
+        TIMESTAMPTZ last_activity_at
+    }
+
+    cards {
+        TEXT id PK
+        TEXT account_id FK
+        VARCHAR card_number_masked
+        VARCHAR card_hash UK
+        VARCHAR card_type
+        VARCHAR card_network
+        INT expiry_month
+        INT expiry_year
+        VARCHAR cvv_hash
+        NUMERIC daily_limit
+        BOOLEAN is_international_enabled
+        BOOLEAN is_contactless_enabled
+        VARCHAR status
+        TIMESTAMPTZ issued_at
+    }
+
+    devices {
+        TEXT id PK
+        VARCHAR device_fingerprint UK
+        VARCHAR device_type
+        VARCHAR os_version
+        VARCHAR browser
+        BOOLEAN is_rooted_or_jailbroken
+        INT trust_score
+        TIMESTAMPTZ first_seen_at
+        TIMESTAMPTZ last_seen_at
+    }
+
+    customer_devices {
+        TEXT customer_id PK,FK
+        TEXT device_id PK,FK
+        BOOLEAN is_primary
+        TIMESTAMPTZ bound_at
+    }
+
+    locations {
+        TEXT id PK
+        VARCHAR city
+        VARCHAR state
+        VARCHAR country
+        VARCHAR postal_code
+        VARCHAR ip_address
+        VARCHAR ip_isp
+        BOOLEAN is_vpn_or_tor
+        NUMERIC latitude
+        NUMERIC longitude
+    }
+
+    merchants {
+        TEXT id PK
+        VARCHAR merchant_code UK
+        VARCHAR name
+        VARCHAR category_code
+        VARCHAR category_name
+        VARCHAR vpa_handle
+        VARCHAR risk_level
+        NUMERIC chargeback_ratio
+    }
+
+    transactions {
+        TEXT id PK
+        VARCHAR txn_reference UK
+        TEXT account_id FK
+        TEXT card_id FK
+        TEXT merchant_id FK
+        TEXT device_id FK
+        TEXT location_id FK
+        payment_channel_enum channel
+        NUMERIC amount
+        VARCHAR currency
+        VARCHAR recipient_identifier
+        transaction_status_enum status
+        TIMESTAMPTZ timestamp
+    }
+
+    risk_rules {
+        TEXT id PK
+        VARCHAR rule_code UK
+        VARCHAR name
+        TEXT description
+        JSONB condition_expression
+        INT weight_score
+        VARCHAR severity
+        BOOLEAN is_active
+        VARCHAR version
+    }
+
+    risk_assessments {
+        TEXT id PK
+        TEXT transaction_id FK,UK
+        INT risk_score
+        VARCHAR risk_level
+        BOOLEAN is_flagged
+        TIMESTAMPTZ evaluated_at
+        VARCHAR model_version
+        INT execution_time_ms
+    }
+
+    transaction_risk_factors {
+        TEXT id PK
+        TEXT risk_assessment_id FK
+        TEXT rule_id FK
+        VARCHAR factor_name
+        INT score_contribution
+        VARCHAR severity
+        JSONB details
+    }
+
+    fraud_alerts {
+        TEXT id PK
+        VARCHAR alert_code UK
+        TEXT transaction_id FK
+        VARCHAR severity
+        alert_status_enum status
+        TEXT assigned_to FK
+        TIMESTAMPTZ sla_due_at
+        TIMESTAMPTZ created_at
+    }
+
+    fraud_cases {
+        TEXT id PK
+        VARCHAR case_number UK
+        VARCHAR title
+        case_priority_enum priority
+        case_status_enum status
+        TEXT assigned_analyst_id FK
+        TEXT primary_alert_id FK
+        NUMERIC estimated_exposure
+        TEXT resolution_summary
+        TIMESTAMPTZ opened_at
+        TIMESTAMPTZ closed_at
+    }
+
+    case_notes {
+        TEXT id PK
+        TEXT case_id FK
+        TEXT author_id FK
+        TEXT content
+        TIMESTAMPTZ created_at
+    }
+
+    case_evidence {
+        TEXT id PK
+        TEXT case_id FK
+        VARCHAR evidence_type
+        TEXT reference_id
+        TEXT notes
+        TIMESTAMPTZ attached_at
+    }
+
+    audit_logs {
+        BIGSERIAL id PK
+        TEXT user_id FK
+        VARCHAR user_badge
+        VARCHAR action
+        VARCHAR entity_name
+        VARCHAR entity_id
+        JSONB old_state
+        JSONB new_state
+        VARCHAR ip_address
+        TIMESTAMPTZ created_at
+    }
+
+    loans {
+        TEXT id PK
+        TEXT customer_id FK
+        TEXT account_id FK
+        VARCHAR loan_reference UK
+        VARCHAR loan_type
+        NUMERIC principal_amount
+        NUMERIC interest_rate
+        INT tenure_months
+        NUMERIC emi_amount
+        NUMERIC outstanding_balance
+        VARCHAR status
+        TIMESTAMPTZ disbursed_at
+    }
+
+    loan_payments {
+        TEXT id PK
+        TEXT loan_id FK
+        VARCHAR payment_reference UK
+        INT installment_number
+        NUMERIC amount_paid
+        NUMERIC principal_component
+        NUMERIC interest_component
+        VARCHAR payment_method
+        TIMESTAMPTZ payment_date
+        VARCHAR status
+    }
+
+    login_history {
+        BIGSERIAL id PK
+        TEXT user_id FK
+        TEXT customer_id FK
+        VARCHAR identifier_used
+        VARCHAR ip_address
+        TEXT location_id FK
+        VARCHAR device_fingerprint
+        VARCHAR user_agent
+        VARCHAR login_status
+        TIMESTAMPTZ attempted_at
+    }
+
+    customer_notifications {
+        TEXT id PK
+        TEXT customer_id FK
+        VARCHAR title
+        TEXT message
+        VARCHAR notification_type
+        VARCHAR severity
+        BOOLEAN is_read
+        TEXT related_transaction_id FK
+        TEXT related_account_id FK
+        TIMESTAMPTZ created_at
+    }

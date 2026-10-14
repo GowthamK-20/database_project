@@ -42,6 +42,30 @@ export async function runSeeds() {
       role: 'COMPLIANCE_ANALYST',
       badge_number: 'BADGE-CMP-301',
     },
+    {
+      id: 'USR-CUST-803',
+      username: 'rohan.gupta',
+      email: 'rohan.g@techcorp.io',
+      full_name: 'Rohan Gupta',
+      role: 'CUSTOMER',
+      badge_number: 'BADGE-CUST-803',
+    },
+    {
+      id: 'USR-CUST-807',
+      username: 'sunita.rao',
+      email: 'sunita.rao@rediffmail.com',
+      full_name: 'Sunita Rao',
+      role: 'CUSTOMER',
+      badge_number: 'BADGE-CUST-807',
+    },
+    {
+      id: 'USR-CUST-801',
+      username: 'ananya.deshmukh',
+      email: 'ananya.d@gmail.com',
+      full_name: 'Ananya Deshmukh',
+      role: 'CUSTOMER',
+      badge_number: 'BADGE-CUST-801',
+    },
   ];
 
   for (const u of users) {
@@ -201,24 +225,24 @@ export async function runSeeds() {
   // 6. SEED CUSTOMERS & ACCOUNTS
   console.log('[SEED] Seeding realistic Indian customers and bank accounts...');
   const customers = [
-    { id: 'CUST-001', code: 'CUST-IND-801', fn: 'Ananya', ln: 'Deshmukh', em: 'ananya.d@gmail.com', ph: '+91 98201 ••••2', pan: 'ABCDE1234F', kyc: 'VERIFIED', tier: 'LOW' },
-    { id: 'CUST-002', code: 'CUST-IND-802', fn: 'Vikram', ln: 'Mehta', em: 'vikram.m@corporatesolutions.in', ph: '+91 98112 ••••5', pan: 'BCDEF2345G', kyc: 'VERIFIED', tier: 'LOW' },
-    { id: 'CUST-003', code: 'CUST-IND-803', fn: 'Rohan', ln: 'Gupta', em: 'rohan.g@techcorp.io', ph: '+91 97410 ••••9', pan: 'CDEFG3456H', kyc: 'VERIFIED', tier: 'MEDIUM' },
+    { id: 'CUST-001', userId: 'USR-CUST-801', code: 'CUST-IND-801', fn: 'Ananya', ln: 'Deshmukh', em: 'ananya.d@gmail.com', ph: '+91 98201 ••••2', pan: 'ABCDE1234F', kyc: 'VERIFIED', tier: 'LOW' },
+    { id: 'CUST-002', userId: null, code: 'CUST-IND-802', fn: 'Vikram', ln: 'Mehta', em: 'vikram.m@corporatesolutions.in', ph: '+91 98112 ••••5', pan: 'BCDEF2345G', kyc: 'VERIFIED', tier: 'LOW' },
+    { id: 'CUST-003', userId: 'USR-CUST-803', code: 'CUST-IND-803', fn: 'Rohan', ln: 'Gupta', em: 'rohan.g@techcorp.io', ph: '+91 97410 ••••9', pan: 'CDEFG3456H', kyc: 'VERIFIED', tier: 'MEDIUM' },
     // MULE RING SUSPECTS
-    { id: 'CUST-004', code: 'CUST-IND-804', fn: 'Deepak', ln: 'Verma', em: 'deepak.v91@yahoo.com', ph: '+91 91234 ••••0', pan: 'DEFGH4567J', kyc: 'PENDING', tier: 'CRITICAL' },
-    { id: 'CUST-005', code: 'CUST-IND-805', fn: 'Suraj', ln: 'Yadav', em: 'suraj.yadav@fastmail.com', ph: '+91 91234 ••••1', pan: 'EFGHI5678K', kyc: 'FLAGGED', tier: 'CRITICAL' },
-    { id: 'CUST-006', code: 'CUST-IND-806', fn: 'Manish', ln: 'Tiwari', em: 'manish.t@inbox.ru', ph: '+91 91234 ••••2', pan: 'FGHIJ6789L', kyc: 'FLAGGED', tier: 'CRITICAL' },
+    { id: 'CUST-004', userId: null, code: 'CUST-IND-804', fn: 'Deepak', ln: 'Verma', em: 'deepak.v91@yahoo.com', ph: '+91 91234 ••••0', pan: 'DEFGH4567J', kyc: 'PENDING', tier: 'CRITICAL' },
+    { id: 'CUST-005', userId: null, code: 'CUST-IND-805', fn: 'Suraj', ln: 'Yadav', em: 'suraj.yadav@fastmail.com', ph: '+91 91234 ••••1', pan: 'EFGHI5678K', kyc: 'FLAGGED', tier: 'CRITICAL' },
+    { id: 'CUST-006', userId: null, code: 'CUST-IND-806', fn: 'Manish', ln: 'Tiwari', em: 'manish.t@inbox.ru', ph: '+91 91234 ••••2', pan: 'FGHIJ6789L', kyc: 'FLAGGED', tier: 'CRITICAL' },
     // DORMANT PROFILE
-    { id: 'CUST-007', code: 'CUST-IND-807', fn: 'Sunita', ln: 'Rao', em: 'sunita.rao@rediffmail.com', ph: '+91 99887 ••••3', pan: 'GHIJK7890M', kyc: 'VERIFIED', tier: 'HIGH' },
+    { id: 'CUST-007', userId: 'USR-CUST-807', code: 'CUST-IND-807', fn: 'Sunita', ln: 'Rao', em: 'sunita.rao@rediffmail.com', ph: '+91 99887 ••••3', pan: 'GHIJK7890M', kyc: 'VERIFIED', tier: 'HIGH' },
   ];
 
   for (const c of customers) {
     await db.query(`
-      INSERT INTO customers (id, customer_code, first_name, last_name, email, phone_masked, phone_hash, pan_masked, kyc_status, risk_tier)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      INSERT INTO customers (id, user_id, customer_code, first_name, last_name, email, phone_masked, phone_hash, pan_masked, kyc_status, risk_tier)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       ON CONFLICT (id) DO UPDATE 
-      SET risk_tier = EXCLUDED.risk_tier, kyc_status = EXCLUDED.kyc_status;
-    `, [c.id, c.code, c.fn, c.ln, c.em, c.ph, `hash_${c.id}`, c.pan, c.kyc, c.tier]);
+      SET risk_tier = EXCLUDED.risk_tier, kyc_status = EXCLUDED.kyc_status, user_id = EXCLUDED.user_id;
+    `, [c.id, c.userId, c.code, c.fn, c.ln, c.em, c.ph, `hash_${c.id}`, c.pan, c.kyc, c.tier]);
   }
 
   // Bind devices to customers (Notice DEV-ROOT-04 is intentionally bound to CUST-004, CUST-005, CUST-006 -> MULE RING!)
@@ -506,5 +530,73 @@ export async function runSeeds() {
     ('USR-ANL-101', 'BADGE-ANL-101', 'ACCOUNT_HOLD_RECOMMENDED', 'accounts', 'ACC-007', '{"status": "DORMANT"}', '{"status": "DORMANT", "hold_requested": true}', '192.168.1.104');
   `);
 
-  console.log('[SEED] Veyra Risk seed generation completed successfully!');
+  // 10. SEED CARDS
+  console.log('[SEED] Seeding payment cards...');
+  const cards = [
+    { id: 'CARD-001', accId: 'ACC-001', mask: '•••• •••• •••• 1024', hash: 'hash_card_001', type: 'DEBIT', net: 'RUPAY', m: 12, y: 2028, cvv: 'cvv_01', lim: 50000.00, intl: false, nfc: true, stat: 'ACTIVE' },
+    { id: 'CARD-002', accId: 'ACC-002', mask: '•••• •••• •••• 5591', hash: 'hash_card_002', type: 'CREDIT', net: 'VISA', m: 8, y: 2029, cvv: 'cvv_02', lim: 200000.00, intl: true, nfc: true, stat: 'ACTIVE' },
+    { id: 'CARD-003', accId: 'ACC-003', mask: '•••• •••• •••• 4892', hash: 'hash_card_003', type: 'DEBIT', net: 'MASTERCARD', m: 5, y: 2027, cvv: 'cvv_03', lim: 75000.00, intl: true, nfc: true, stat: 'ACTIVE' },
+    { id: 'CARD-004', accId: 'ACC-007', mask: '•••• •••• •••• 8832', hash: 'hash_card_004', type: 'DEBIT', net: 'RUPAY', m: 11, y: 2026, cvv: 'cvv_04', lim: 25000.00, intl: false, nfc: false, stat: 'ACTIVE' },
+  ];
+
+  for (const crd of cards) {
+    await db.query(`
+      INSERT INTO cards (id, account_id, card_number_masked, card_hash, card_type, card_network, expiry_month, expiry_year, cvv_hash, daily_limit, is_international_enabled, is_contactless_enabled, status)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      ON CONFLICT (id) DO NOTHING;
+    `, [crd.id, crd.accId, crd.mask, crd.hash, crd.type, crd.net, crd.m, crd.y, crd.cvv, crd.lim, crd.intl, crd.nfc, crd.stat]);
+  }
+
+  // Link London Geo-Leap transaction (TXN-2026-9004) to CARD-003
+  await db.query(`UPDATE transactions SET card_id = 'CARD-003' WHERE id = 'TXN-2026-9004';`);
+
+  // 11. SEED LOANS & LOAN PAYMENTS
+  console.log('[SEED] Seeding loans and payment schedules...');
+  const loans = [
+    { id: 'LOAN-001', custId: 'CUST-007', accId: 'ACC-007', ref: 'LN-MUM-2024-881', type: 'HOME', prin: 4500000.00, rate: 8.50, tenure: 240, emi: 39052.00, bal: 3420000.00, stat: 'ACTIVE' },
+    { id: 'LOAN-002', custId: 'CUST-003', accId: 'ACC-003', ref: 'LN-BLR-2025-412', type: 'PERSONAL', prin: 500000.00, rate: 11.50, tenure: 36, emi: 16498.00, bal: 280000.00, stat: 'ACTIVE' },
+  ];
+
+  for (const ln of loans) {
+    await db.query(`
+      INSERT INTO loans (id, customer_id, account_id, loan_reference, loan_type, principal_amount, interest_rate, tenure_months, emi_amount, outstanding_balance, status)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      ON CONFLICT (id) DO NOTHING;
+    `, [ln.id, ln.custId, ln.accId, ln.ref, ln.type, ln.prin, ln.rate, ln.tenure, ln.emi, ln.bal, ln.stat]);
+  }
+
+  const loanPayments = [
+    { id: 'LPAY-001', loanId: 'LOAN-001', ref: 'PAY-LN-881-01', inst: 1, amt: 39052.00, prin: 7177.00, int: 31875.00, meth: 'AUTO_DEBIT', stat: 'SUCCESS' },
+    { id: 'LPAY-002', loanId: 'LOAN-001', ref: 'PAY-LN-881-02', inst: 2, amt: 39052.00, prin: 7228.00, int: 31824.00, meth: 'AUTO_DEBIT', stat: 'SUCCESS' },
+    { id: 'LPAY-003', loanId: 'LOAN-002', ref: 'PAY-LN-412-01', inst: 1, amt: 16498.00, prin: 11706.00, int: 4792.00, meth: 'UPI', stat: 'SUCCESS' },
+  ];
+
+  for (const lp of loanPayments) {
+    await db.query(`
+      INSERT INTO loan_payments (id, loan_id, payment_reference, installment_number, amount_paid, principal_component, interest_component, payment_method, status)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      ON CONFLICT (id) DO NOTHING;
+    `, [lp.id, lp.loanId, lp.ref, lp.inst, lp.amt, lp.prin, lp.int, lp.meth, lp.stat]);
+  }
+
+  // 12. SEED LOGIN HISTORY (SECURITY AUDITING)
+  console.log('[SEED] Seeding authentication and security login history...');
+  await db.query(`
+    INSERT INTO login_history (user_id, customer_id, identifier_used, ip_address, location_id, device_fingerprint, user_agent, login_status) VALUES
+    ('USR-CUST-803', 'CUST-003', 'rohan.g@techcorp.io', '122.175.40.18', 'LOC-BLR-02', 'fp_c88319e74bb0147e822', 'Chrome Mobile 128 (Android 14)', 'SUCCESS'),
+    ('USR-CUST-803', 'CUST-003', 'rohan.g@techcorp.io', '185.220.101.5', 'LOC-LON-06', 'fp_unknown_datacenter', 'Headless Chrome / Tor Node', 'SUSPICIOUS_CHALLENGE'),
+    ('USR-CUST-807', 'CUST-007', 'sunita.rao@rediffmail.com', '43.242.176.88', 'LOC-JAI-05', 'fp_mule_shared_device_99', 'LineageOS 21 Custom WebView', 'SUSPICIOUS_CHALLENGE');
+  `);
+
+  // 13. SEED CUSTOMER NOTIFICATIONS
+  console.log('[SEED] Seeding customer in-app notifications...');
+  await db.query(`
+    INSERT INTO customer_notifications (id, customer_id, title, message, notification_type, severity, is_read, related_account_id) VALUES
+    ('NOTIF-001', 'CUST-007', 'URGENT SECURITY ALERT: Protective Account Hold', 'An unusual midnight withdrawal of ₹3,80,000 was initiated from Jaipur. Account ••••3290 has been temporarily frozen for your security.', 'ACCOUNT_FROZEN', 'CRITICAL', false, 'ACC-007'),
+    ('NOTIF-002', 'CUST-003', 'SECURITY ALERT: High-Risk Geolocation Leap', 'A transaction attempt of ₹72,000 from London was detected shortly after your Bengaluru login. Transaction has been flagged for analyst review.', 'FRAUD_WARNING', 'WARNING', false, 'ACC-003'),
+    ('NOTIF-003', 'CUST-001', 'TRANSACTION SUCCESS: Statement Update', 'Your payment of ₹15,000 via UPI has been processed successfully.', 'TRANSACTION_SUCCESS', 'INFO', true, 'ACC-001')
+    ON CONFLICT (id) DO NOTHING;
+  `);
+
+  console.log('[SEED] FinGuard AI seed generation completed successfully!');
 }

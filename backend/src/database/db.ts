@@ -38,9 +38,19 @@ class DatabaseManager {
 
     if (!this.pgPool) {
       // Use os.homedir() directory to avoid OneDrive file-locking issues on Windows
-      const dataDir = process.env.DATA_DIR || path.join(os.homedir(), '.veyra_pgdata');
+      const dataDir = process.env.DATA_DIR || path.join(os.homedir(), '.finguard_pgdata');
       if (!fs.existsSync(dataDir)) {
         fs.mkdirSync(dataDir, { recursive: true });
+      } else {
+        const pidFile = path.join(dataDir, 'postmaster.pid');
+        if (fs.existsSync(pidFile)) {
+          try {
+            fs.unlinkSync(pidFile);
+            console.log('[DB] Cleaned up stale postmaster.pid lock file.');
+          } catch (e) {
+            // ignore
+          }
+        }
       }
       this.pgliteInstance = new PGlite(dataDir);
       await this.pgliteInstance.waitReady;
@@ -88,11 +98,18 @@ class DatabaseManager {
 
   private async applyMigrations(): Promise<void> {
     console.log('[DB] Checking and applying database migrations...');
-    const migrationsDir = path.resolve(process.cwd(), 'src', 'database', 'migrations');
+    const possibleDirs = [
+      path.resolve(process.cwd(), 'src', 'database', 'migrations'),
+      path.resolve(process.cwd(), 'database', 'migrations'),
+      path.resolve(process.cwd(), '..', 'database', 'migrations'),
+      path.resolve(__dirname, 'migrations'),
+    ];
+    const migrationsDir = possibleDirs.find(d => fs.existsSync(d)) || possibleDirs[0];
     
     const migrationFiles = [
       '001_initial_schema.sql',
-      '002_views_triggers.sql'
+      '002_views_triggers.sql',
+      '003_add_cards_loans_notifications.sql'
     ];
 
     for (const file of migrationFiles) {

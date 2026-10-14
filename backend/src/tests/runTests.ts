@@ -3,12 +3,21 @@ import bcrypt from 'bcryptjs';
 import { generateToken, AuthenticatedUser } from '../middleware/authMiddleware.js';
 import { synthesizeTransactionStory } from '../utils/storyGenerator.js';
 
+import { runSeeds } from '../database/seeds/seedData.js';
+
 async function runTestSuite() {
   console.log('================================================================');
-  console.log('>>> VEYRA RISK // COMPREHENSIVE AUTOMATED TEST SUITE <<<');
+  console.log('>>> FINGUARD AI // COMPREHENSIVE AUTOMATED TEST SUITE <<<');
   console.log('================================================================');
 
   await db.init();
+
+  // If running against fresh test database, auto-run seeds
+  const userCheckInit = await db.query('SELECT count(*) as count FROM users');
+  if (parseInt(userCheckInit.rows[0].count) === 0) {
+    console.log('[TEST] Clean database detected, running initial seeds...');
+    await runSeeds();
+  }
 
   let passed = 0;
   let failed = 0;
@@ -122,6 +131,50 @@ async function runTestSuite() {
   console.log('\n--- 6. Testing Immutable Audit Log Ledger ---');
   const auditRes = await db.query('SELECT count(*) as count FROM audit_logs');
   assert(parseInt(auditRes.rows[0].count) >= 2, 'Audit log correctly contains tamper-evident entries');
+
+  // --- TEST 7: Cards Entity & Check Constraints ---
+  console.log('\n--- 7. Testing Cards Entity & Integrity Constraints ---');
+  const cardsRes = await db.query('SELECT count(*) as count FROM cards');
+  assert(parseInt(cardsRes.rows[0].count) >= 4, 'Cards table contains seeded payment cards');
+
+  // Test Check Constraint: Expiry month must be 1..12
+  let cardConstraintPassed = false;
+  try {
+    await db.query(`
+      INSERT INTO cards (id, account_id, card_number_masked, card_hash, card_type, card_network, expiry_month, expiry_year, cvv_hash)
+      VALUES ('FAIL-CARD', 'ACC-001', '•••• 9999', 'hash_fail', 'DEBIT', 'VISA', 14, 2028, 'cvv_fail');
+    `);
+  } catch (err) {
+    cardConstraintPassed = true;
+  }
+  assert(cardConstraintPassed, 'CHECK constraint strictly blocks invalid expiry month (> 12)');
+
+  const cardTxnCheck = await db.query("SELECT card_id FROM transactions WHERE id = 'TXN-2026-9004'");
+  assert(cardTxnCheck.rows.length === 1 && cardTxnCheck.rows[0].card_id === 'CARD-003', 'Transaction TXN-2026-9004 is linked to card CARD-003');
+
+  // --- TEST 8: Loans & Loan Repayment Ledgers ---
+  console.log('\n--- 8. Testing Loans & Loan Repayment Ledgers ---');
+  const loanRes = await db.query('SELECT count(*) as count FROM loans');
+  assert(parseInt(loanRes.rows[0].count) >= 2, 'Loans table contains active customer credit facilities');
+
+  const lpayRes = await db.query('SELECT count(*) as count FROM loan_payments');
+  assert(parseInt(lpayRes.rows[0].count) >= 3, 'Loan payments ledger contains verified installment repayments');
+
+  // --- TEST 9: Security Telemetry (Login History) ---
+  console.log('\n--- 9. Testing Security & Account Takeover Telemetry ---');
+  const loginRes = await db.query('SELECT count(*) as count FROM login_history');
+  assert(parseInt(loginRes.rows[0].count) >= 3, 'Login history captures authentication and challenge events');
+
+  const suspiciousLogins = await db.query("SELECT count(*) as count FROM login_history WHERE login_status = 'SUSPICIOUS_CHALLENGE'");
+  assert(parseInt(suspiciousLogins.rows[0].count) >= 2, 'Login history captures suspicious login challenges');
+
+  // --- TEST 10: Customer In-App Notifications ---
+  console.log('\n--- 10. Testing Customer In-App Notifications ---');
+  const notifRes = await db.query('SELECT count(*) as count FROM customer_notifications WHERE is_read = false');
+  assert(parseInt(notifRes.rows[0].count) >= 2, 'Customer notifications queue contains unread security alerts');
+
+  const custUserRes = await db.query("SELECT c.id, c.user_id, u.username, u.role FROM customers c JOIN users u ON c.user_id = u.id WHERE u.role = 'CUSTOMER'");
+  assert(custUserRes.rows.length >= 3, 'Customer profiles correctly link to authenticated CUSTOMER role users');
 
   console.log('\n================================================================');
   console.log(`TEST RESULTS: ${passed} PASSED / ${failed} FAILED`);
