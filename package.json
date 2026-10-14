@@ -1,0 +1,16 @@
+{
+  "name": "veyra-risk-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Veyra Risk // Enterprise Financial Risk & Fraud Intelligence Platform",
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "seed": "cd backend && npm run seed",
+    "test": "cd backend && npm run test",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend"
+  },
+  "keywords": ["fintech", "fraud-detection", "risk-management", "postgresql", "dbms"],
+  "author": "Veyra Engineering",
+  "license": "UNLICENSED"
+}
