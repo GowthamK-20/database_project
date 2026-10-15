@@ -44,6 +44,9 @@ const MainApp: React.FC = () => {
             onSelectTransaction={handleSelectTransaction}
             onNavigateToAlerts={() => handleNavigate('alerts')}
             onNavigateToCases={() => handleNavigate('cases')}
+            onNavigateToLedger={() => handleNavigate('transactions')}
+            onNavigateToDatabase={() => handleNavigate('database')}
+            onNavigateToSqlLab={() => handleNavigate('sql-lab')}
           />
         )}
 

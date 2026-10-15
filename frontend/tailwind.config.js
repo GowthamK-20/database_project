@@ -41,11 +41,21 @@ export default {
           blue: '#3B82F6',
           'blue-bg': 'rgba(59, 130, 246, 0.08)',
           'blue-border': 'rgba(59, 130, 246, 0.25)',
+          lime: '#bef264',
+          'lime-glow': 'rgba(190, 242, 100, 0.25)',
+        },
+        lime: {
+          300: '#bef264',
+          400: '#a3e635',
+          500: '#84cc16',
+          600: '#65a30d',
+          accent: '#bbf246',
         }
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        display: ['Syne', 'Inter', 'sans-serif'],
       },
       fontSize: {
         '2xs': ['10px', '14px'],

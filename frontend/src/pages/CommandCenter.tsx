@@ -5,17 +5,24 @@ import { Currency } from '../components/common/Currency';
 import { RiskBadge } from '../components/common/RiskBadge';
 import { StatusBadge } from '../components/common/StatusBadge';
 import { AlertCircle, Clock, ShieldCheck, ArrowRight, Zap, RefreshCw } from 'lucide-react';
+import { GlobalSurveillanceSimulation } from '../components/simulation/GlobalSurveillanceSimulation';
 
 interface CommandCenterProps {
   onSelectTransaction: (txnId: string) => void;
   onNavigateToAlerts: () => void;
   onNavigateToCases: () => void;
+  onNavigateToLedger?: () => void;
+  onNavigateToDatabase?: () => void;
+  onNavigateToSqlLab?: () => void;
 }
 
 export const CommandCenter: React.FC<CommandCenterProps> = ({
   onSelectTransaction,
   onNavigateToAlerts,
   onNavigateToCases,
+  onNavigateToLedger,
+  onNavigateToDatabase,
+  onNavigateToSqlLab,
 }) => {
   const [metrics, setMetrics] = useState<any>(null);
   const [attentionItems, setAttentionItems] = useState<any[]>([]);
@@ -45,7 +52,14 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({
   }, []);
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto">
+      {/* GLOBAL SURVEILLANCE & REAL-TIME TRANSFER RISK EVALUATOR (INSTITUTIONAL SIMULATION) */}
+      <GlobalSurveillanceSimulation
+        onNavigateToLedger={onNavigateToLedger || onNavigateToAlerts}
+        onNavigateToDatabase={onNavigateToDatabase || onNavigateToAlerts}
+        onNavigateToSqlLab={onNavigateToSqlLab || onNavigateToAlerts}
+      />
+
       {/* SECTION HEADER */}
       <div className="flex items-center justify-between border-b border-veyra-800 pb-3">
         <div>
