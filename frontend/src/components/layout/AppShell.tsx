@@ -83,10 +83,10 @@ export const AppShell: React.FC<AppShellProps> = ({
       ],
     },
     {
-      group: 'DATABASE & ANALYTICAL ENGINES',
+      group: 'DATABASE & SYSTEM ADMIN (ROOT)',
       items: [
-        { id: 'database', label: 'PostgreSQL Schema Explorer', icon: Database, badge: '25', badgeColor: 'blue', roles: ['ADMIN', 'RISK_MANAGER', 'FRAUD_ANALYST', 'COMPLIANCE_ANALYST', 'VIEWER'] },
-        { id: 'sql-lab', label: 'Analytical SQL Workbench', icon: Code2, highlight: true, roles: ['ADMIN', 'RISK_MANAGER', 'FRAUD_ANALYST', 'COMPLIANCE_ANALYST', 'VIEWER'] },
+        { id: 'database', label: 'PostgreSQL Schema Explorer', icon: Database, badge: 'ADMIN', badgeColor: 'blue', roles: ['ADMIN'] },
+        { id: 'sql-lab', label: 'Analytical SQL Workbench', icon: Code2, highlight: true, roles: ['ADMIN'] },
       ],
     },
     {

@@ -14,18 +14,26 @@ import {
   Database,
   ArrowUpDown
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 interface GlobalSurveillanceSimulationProps {
   onNavigateToLedger: () => void;
-  onNavigateToDatabase: () => void;
-  onNavigateToSqlLab: () => void;
+  onNavigateToDatabase?: () => void;
+  onNavigateToSqlLab?: () => void;
+  onNavigateToAlerts?: () => void;
+  onNavigateToCases?: () => void;
 }
 
 export const GlobalSurveillanceSimulation: React.FC<GlobalSurveillanceSimulationProps> = ({
   onNavigateToLedger,
   onNavigateToDatabase,
   onNavigateToSqlLab,
+  onNavigateToAlerts,
+  onNavigateToCases,
 }) => {
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'ADMIN';
+
   // Live Simulator Card State
   const [sendAmount, setSendAmount] = useState<string>('380000');
   const [currency, setCurrency] = useState<'INR' | 'USD' | 'EUR'>('INR');
@@ -279,21 +287,47 @@ export const GlobalSurveillanceSimulation: React.FC<GlobalSurveillanceSimulation
             <ArrowRight className="w-4 h-4" />
           </button>
 
-          <button
-            onClick={onNavigateToDatabase}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-200 font-semibold text-xs transition-all hover:scale-105"
-          >
-            <Database className="w-4 h-4 text-blue-400" />
-            <span>Database Explorer (16 Tables)</span>
-          </button>
+          {isAdmin ? (
+            <>
+              <button
+                onClick={onNavigateToDatabase}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/40 text-blue-200 font-semibold text-xs transition-all hover:scale-105"
+              >
+                <Database className="w-4 h-4 text-blue-400" />
+                <span>[ADMIN] PostgreSQL Schema (16 Tables)</span>
+              </button>
 
-          <button
-            onClick={onNavigateToSqlLab}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-200 font-semibold text-xs transition-all hover:scale-105"
-          >
-            <Zap className="w-4 h-4 text-amber-400" />
-            <span>Analytical SQL Lab (0.53ms)</span>
-          </button>
+              <button
+                onClick={onNavigateToSqlLab}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/40 text-amber-200 font-semibold text-xs transition-all hover:scale-105"
+              >
+                <Zap className="w-4 h-4 text-amber-400" />
+                <span>[ADMIN] Analytical SQL Lab (0.53ms)</span>
+              </button>
+            </>
+          ) : (
+            <>
+              {onNavigateToAlerts && (
+                <button
+                  onClick={onNavigateToAlerts}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-200 font-semibold text-xs transition-all hover:scale-105"
+                >
+                  <AlertTriangle className="w-4 h-4 text-red-400" />
+                  <span>Alert SLA Queue (3 Critical)</span>
+                </button>
+              )}
+
+              {onNavigateToCases && (
+                <button
+                  onClick={onNavigateToCases}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-200 font-semibold text-xs transition-all hover:scale-105"
+                >
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <span>Forensic Case Dockets</span>
+                </button>
+              )}
+            </>
+          )}
         </div>
       </div>
 

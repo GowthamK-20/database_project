@@ -56,8 +56,10 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({
       {/* GLOBAL SURVEILLANCE & REAL-TIME TRANSFER RISK EVALUATOR (INSTITUTIONAL SIMULATION) */}
       <GlobalSurveillanceSimulation
         onNavigateToLedger={onNavigateToLedger || onNavigateToAlerts}
-        onNavigateToDatabase={onNavigateToDatabase || onNavigateToAlerts}
-        onNavigateToSqlLab={onNavigateToSqlLab || onNavigateToAlerts}
+        onNavigateToDatabase={onNavigateToDatabase}
+        onNavigateToSqlLab={onNavigateToSqlLab}
+        onNavigateToAlerts={onNavigateToAlerts}
+        onNavigateToCases={onNavigateToCases}
       />
 
       {/* SECTION HEADER */}
