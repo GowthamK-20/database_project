@@ -23,7 +23,8 @@ import {
   AlertCircle,
   Hash,
   FileCode,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Download
 } from 'lucide-react';
 
 interface DatabaseExplorerProps {
@@ -128,6 +129,31 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
     if (onNavigateToSqlLab) {
       onNavigateToSqlLab(sql);
     }
+  };
+
+  const handleExportCsv = () => {
+    if (!tableData || !tableData.rows || tableData.rows.length === 0) return;
+    const cols = tableData.columns.map((c) => c.column_name);
+    const header = cols.join(',');
+    const rows = tableData.rows.map((row) =>
+      cols
+        .map((col) => {
+          const val = row[col];
+          if (val === null || val === undefined) return '';
+          const str = String(val).replace(/"/g, '""');
+          return `"${str}"`;
+        })
+        .join(',')
+    );
+    const csvContent = [header, ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${selectedTableName}_data_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // Filter tables/views list
@@ -481,8 +507,21 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                       <option value={25}>25</option>
                       <option value={50}>50</option>
                       <option value={100}>100</option>
+                      <option value={500}>500</option>
+                      <option value={1000}>1,000</option>
+                      <option value={2000}>ALL (1,000+)</option>
                     </select>
                   </div>
+
+                  <button
+                    onClick={handleExportCsv}
+                    disabled={!tableData || tableData.rows.length === 0}
+                    className="flex items-center gap-1.5 px-2.5 py-1 text-2xs font-mono rounded bg-veyra-850 hover:bg-veyra-800 border border-veyra-750 text-slate-300 disabled:opacity-50 transition-colors"
+                    title="Export Current Table Records to CSV"
+                  >
+                    <Download className="w-3.5 h-3.5 text-blue-400" />
+                    <span>EXPORT CSV</span>
+                  </button>
 
                   <button
                     onClick={() => fetchTableData(selectedTableName, page, pageSize, searchQuery, sortBy, sortOrder)}

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AppShell } from './components/layout/AppShell';
-import { DemoWalkthroughModal } from './components/common/DemoWalkthroughModal';
 import { CommandCenter } from './pages/CommandCenter';
 import { TransactionExplorer } from './pages/TransactionExplorer';
 import { TransactionDetail } from './pages/TransactionDetail';
@@ -15,13 +14,13 @@ import { AnalyticsReports } from './pages/AnalyticsReports';
 import { AuditLedger } from './pages/AuditLedger';
 import { DatabaseExplorer } from './pages/DatabaseExplorer';
 import { SqlQueryLab } from './pages/SqlQueryLab';
+import { IncidentReplay } from './pages/IncidentReplay';
 
 const MainApp: React.FC = () => {
   const { quickSwitchUser } = useAuth();
   const [currentTab, setCurrentTab] = useState<string>('overview');
   const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null);
   const [sqlLabInitialQuery, setSqlLabInitialQuery] = useState<string | undefined>(undefined);
-  const [isWalkthroughOpen, setIsWalkthroughOpen] = useState<boolean>(true); // Auto-open for initial presentation
 
   const handleSelectTransaction = (txnId: string) => {
     setSelectedTransactionId(txnId);
@@ -36,12 +35,10 @@ const MainApp: React.FC = () => {
   };
 
   return (
-    <>
-      <AppShell
-        currentTab={currentTab}
-        onNavigate={handleNavigate}
-        onOpenWalkthrough={() => setIsWalkthroughOpen(true)}
-      >
+    <AppShell
+      currentTab={currentTab}
+      onNavigate={handleNavigate}
+    >
         {currentTab === 'overview' && (
           <CommandCenter
             onSelectTransaction={handleSelectTransaction}
@@ -99,16 +96,15 @@ const MainApp: React.FC = () => {
             onNavigateToExplorer={() => setCurrentTab('database')}
           />
         )}
-      </AppShell>
 
-      <DemoWalkthroughModal
-        isOpen={isWalkthroughOpen}
-        onClose={() => setIsWalkthroughOpen(false)}
-        onNavigate={handleNavigate}
-        onSelectTransaction={handleSelectTransaction}
-        onQuickSwitchUser={quickSwitchUser}
-      />
-    </>
+        {currentTab === 'scenarios' && (
+          <IncidentReplay
+            onNavigate={handleNavigate}
+            onSelectTransaction={handleSelectTransaction}
+            onQuickSwitchUser={quickSwitchUser}
+          />
+        )}
+      </AppShell>
   );
 };
 

@@ -299,7 +299,7 @@ export async function listDatabaseTables(req: AuthRequest, res: Response): Promi
 export async function getTableDetails(req: AuthRequest, res: Response): Promise<void> {
   const tableName = String(req.params.tableName);
   const page = Math.max(1, parseInt(String(req.query.page || '1'), 10));
-  const pageSize = Math.min(100, Math.max(5, parseInt(String(req.query.pageSize || '25'), 10)));
+  const pageSize = Math.min(2000, Math.max(5, parseInt(String(req.query.pageSize || '25'), 10)));
   const offset = (page - 1) * pageSize;
   const search = typeof req.query.search === 'string' ? req.query.search.trim() : '';
   const sortBy = typeof req.query.sortBy === 'string' ? req.query.sortBy.trim() : '';
@@ -462,10 +462,10 @@ export async function executeRawQuery(req: AuthRequest, res: Response): Promise<
     }
   }
 
-  // Safety safeguard: Append LIMIT 500 if no LIMIT is specified in SELECT query
+  // Safety safeguard: Append LIMIT 2000 if no LIMIT is specified in SELECT query
   let executableSql = trimmedSql.replace(/;+\s*$/, '');
   if (!upperSql.startsWith('EXPLAIN') && !upperSql.includes('LIMIT')) {
-    executableSql = `${executableSql} LIMIT 500`;
+    executableSql = `${executableSql} LIMIT 2000`;
   }
 
   const start = performance.now();
