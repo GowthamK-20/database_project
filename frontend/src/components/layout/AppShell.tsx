@@ -17,6 +17,8 @@ import {
   Radio,
   ChevronDown,
   Compass,
+  Database,
+  Code2,
 } from 'lucide-react';
 
 interface AppShellProps {
@@ -48,7 +50,13 @@ export const AppShell: React.FC<AppShellProps> = ({
     { id: 'audit', label: 'Immutable Audit Ledger', icon: History, roles: ['ADMIN', 'RISK_MANAGER', 'COMPLIANCE_ANALYST'] },
   ];
 
+  const databaseNavItems = [
+    { id: 'database', label: 'Database Explorer', icon: Database, badge: '21', roles: ['ADMIN', 'RISK_MANAGER', 'FRAUD_ANALYST', 'COMPLIANCE_ANALYST', 'VIEWER'] },
+    { id: 'sql-lab', label: 'SQL Query Lab', icon: Code2, highlight: true, roles: ['ADMIN', 'RISK_MANAGER', 'FRAUD_ANALYST', 'COMPLIANCE_ANALYST', 'VIEWER'] },
+  ];
+
   const demoPersonas = [
+
     { username: 'rahul.sharma', label: 'Rahul Sharma (Fraud Analyst)', role: 'FRAUD_ANALYST' },
     { username: 'priya.nair', label: 'Priya Nair (Risk Manager)', role: 'RISK_MANAGER' },
     { username: 'amit.patel', label: 'Amit Patel (Compliance Officer)', role: 'COMPLIANCE_ANALYST' },
@@ -119,6 +127,43 @@ export const AppShell: React.FC<AppShellProps> = ({
                 </div>
                 {item.badge && (
                   <span className="px-1.5 py-0.2 rounded text-2xs font-mono font-semibold bg-red-950/60 text-red-400 border border-red-800/60">
+                    {item.badge}
+                  </span>
+                )}
+                {item.highlight && !isActive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500/80" />
+                )}
+              </button>
+            );
+          })}
+
+          <div className="px-2 pb-1.5 pt-3 text-2xs font-semibold text-slate-500 uppercase tracking-wider font-mono">
+            DATABASE & SQL INTELLIGENCE
+          </div>
+
+          {databaseNavItems.map((item) => {
+            const hasAccess = user && item.roles.includes(user.role);
+            if (!hasAccess) return null;
+
+            const isActive = currentTab === item.id;
+            const Icon = item.icon;
+
+            return (
+              <button
+                key={item.id}
+                onClick={() => onNavigate(item.id)}
+                className={`w-full flex items-center justify-between px-2.5 py-2 rounded text-xs transition-colors text-left ${
+                  isActive
+                    ? 'bg-blue-600/15 text-blue-300 font-medium border border-blue-500/30'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-veyra-800/60 border border-transparent'
+                }`}
+              >
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
+                  <span className="truncate">{item.label}</span>
+                </div>
+                {item.badge && (
+                  <span className="px-1.5 py-0.2 rounded text-2xs font-mono font-semibold bg-blue-950/60 text-blue-300 border border-blue-800/60">
                     {item.badge}
                   </span>
                 )}

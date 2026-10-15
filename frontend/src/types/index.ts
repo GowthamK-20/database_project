@@ -210,3 +210,81 @@ export interface AuditLogItem {
   user_full_name?: string;
   user_role?: string;
 }
+
+export interface DatabaseTableMeta {
+  name: string;
+  type: 'BASE TABLE' | 'VIEW';
+  rowCount: number;
+  primaryKeys: string[];
+  columnCount: number;
+}
+
+export interface DatabaseCatalogResponse {
+  databaseDialect: string;
+  mode: string;
+  tables: DatabaseTableMeta[];
+  views: DatabaseTableMeta[];
+  totalTables: number;
+  totalViews: number;
+}
+
+export interface TableColumnMeta {
+  column_name: string;
+  data_type: string;
+  is_nullable: string;
+  column_default: string | null;
+  isPrimaryKey: boolean;
+  foreignKey: {
+    column_name: string;
+    foreign_table: string;
+    foreign_column: string;
+  } | null;
+}
+
+export interface TableForeignKeyMeta {
+  column_name: string;
+  foreign_table: string;
+  foreign_column: string;
+}
+
+export interface TableDetailResponse {
+  tableName: string;
+  columns: TableColumnMeta[];
+  primaryKeys: string[];
+  foreignKeys: TableForeignKeyMeta[];
+  rows: Record<string, any>[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    totalRows: number;
+    totalPages: number;
+  };
+}
+
+export interface RawQueryResponse {
+  success: boolean;
+  executionMs: number;
+  rowCount: number;
+  columns: string[];
+  rows: Record<string, any>[];
+  message?: string;
+}
+
+export interface SampleQueryItem {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  sql: string;
+}
+
+export interface QueryHistoryItem {
+  id: string;
+  sql: string;
+  executedAt: string;
+  executionMs: number;
+  rowCount: number;
+  status: 'SUCCESS' | 'ERROR';
+  error?: string;
+}
+

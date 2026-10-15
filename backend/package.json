@@ -8,6 +8,9 @@
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
     "seed": "tsx src/database/seedRunner.ts",
+    "generate:dataset": "tsx src/scripts/generateDataset.ts",
+    "import:dataset": "tsx src/scripts/importDataset.ts",
+    "sql": "tsx src/scripts/cliQuery.ts",
     "test": "tsx src/tests/runTests.ts"
   },
   "dependencies": {

@@ -13,11 +13,14 @@ import { Customer360 } from './pages/Customer360';
 import { MerchantIntel } from './pages/MerchantIntel';
 import { AnalyticsReports } from './pages/AnalyticsReports';
 import { AuditLedger } from './pages/AuditLedger';
+import { DatabaseExplorer } from './pages/DatabaseExplorer';
+import { SqlQueryLab } from './pages/SqlQueryLab';
 
 const MainApp: React.FC = () => {
   const { quickSwitchUser } = useAuth();
   const [currentTab, setCurrentTab] = useState<string>('overview');
   const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null);
+  const [sqlLabInitialQuery, setSqlLabInitialQuery] = useState<string | undefined>(undefined);
   const [isWalkthroughOpen, setIsWalkthroughOpen] = useState<boolean>(true); // Auto-open for initial presentation
 
   const handleSelectTransaction = (txnId: string) => {
@@ -78,6 +81,24 @@ const MainApp: React.FC = () => {
         {currentTab === 'analytics' && <AnalyticsReports />}
 
         {currentTab === 'audit' && <AuditLedger />}
+
+        {currentTab === 'database' && (
+          <DatabaseExplorer
+            onNavigateToSqlLab={(initialSql) => {
+              if (initialSql) {
+                setSqlLabInitialQuery(initialSql);
+              }
+              setCurrentTab('sql-lab');
+            }}
+          />
+        )}
+
+        {currentTab === 'sql-lab' && (
+          <SqlQueryLab
+            initialSql={sqlLabInitialQuery}
+            onNavigateToExplorer={() => setCurrentTab('database')}
+          />
+        )}
       </AppShell>
 
       <DemoWalkthroughModal

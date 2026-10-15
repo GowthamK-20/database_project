@@ -1,7 +1,16 @@
+import {
+  DatabaseCatalogResponse,
+  TableDetailResponse,
+  RawQueryResponse,
+  SampleQueryItem,
+  QueryHistoryItem
+} from '../types';
+
 const API_BASE = '/api/v1';
 
 class ApiService {
   private token: string | null = null;
+
 
   setToken(token: string | null) {
     this.token = token;
@@ -186,19 +195,44 @@ class ApiService {
   }
 
   // Database Catalog & SQL Explorer
-  async getDatabaseTables() {
-    return this.request<{ databaseDialect: string; mode: string; tables: any[]; views: any[] }>('/database/tables');
+  async getDatabaseTables(): Promise<DatabaseCatalogResponse> {
+    return this.request<DatabaseCatalogResponse>('/database/tables');
   }
 
-  async getTableDetails(tableName: string) {
-    return this.request<{ tableName: string; columns: any[]; sampleRows: any[]; totalSampleCount: number }>(`/database/tables/${tableName}`);
+  async getTableDetails(
+    tableName: string,
+    params: {
+      page?: number;
+      pageSize?: number;
+      search?: string;
+      sortBy?: string;
+      sortOrder?: 'ASC' | 'DESC';
+    } = {}
+  ): Promise<TableDetailResponse> {
+    const qs = new URLSearchParams();
+    if (params.page) qs.append('page', String(params.page));
+    if (params.pageSize) qs.append('pageSize', String(params.pageSize));
+    if (params.search) qs.append('search', params.search);
+    if (params.sortBy) qs.append('sortBy', params.sortBy);
+    if (params.sortOrder) qs.append('sortOrder', params.sortOrder);
+
+    const query = qs.toString() ? `?${qs.toString()}` : '';
+    return this.request<TableDetailResponse>(`/database/tables/${tableName}${query}`);
   }
 
-  async executeRawQuery(sql: string) {
-    return this.request<{ success: boolean; executionMs: number; rowCount: number; columns: string[]; rows: any[] }>('/database/query', {
+  async executeRawQuery(sql: string): Promise<RawQueryResponse> {
+    return this.request<RawQueryResponse>('/database/query', {
       method: 'POST',
       body: JSON.stringify({ sql }),
     });
+  }
+
+  async getSampleQueries(): Promise<{ queries: SampleQueryItem[] }> {
+    return this.request<{ queries: SampleQueryItem[] }>('/database/sample-queries');
+  }
+
+  async getQueryHistory(): Promise<{ history: QueryHistoryItem[] }> {
+    return this.request<{ history: QueryHistoryItem[] }>('/database/history');
   }
 }
 

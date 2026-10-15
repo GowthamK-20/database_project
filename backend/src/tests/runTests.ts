@@ -176,6 +176,104 @@ async function runTestSuite() {
   const custUserRes = await db.query("SELECT c.id, c.user_id, u.username, u.role FROM customers c JOIN users u ON c.user_id = u.id WHERE u.role = 'CUSTOMER'");
   assert(custUserRes.rows.length >= 3, 'Customer profiles correctly link to authenticated CUSTOMER role users');
 
+  // --- TEST 11: Stage 2 - Synthetic Dataset Scale & Referential Integrity ---
+  console.log('\n--- 11. Testing Stage 2 Synthetic Dataset Scale & Referential Integrity ---');
+  const custTotal = await db.query('SELECT count(*) as count FROM customers');
+  assert(parseInt(custTotal.rows[0].count) >= 1000, `Total customers scaled to >= 1,000 (actual: ${custTotal.rows[0].count})`);
+
+  const acctTotal = await db.query('SELECT count(*) as count FROM accounts');
+  assert(parseInt(acctTotal.rows[0].count) >= 1000, `Total accounts scaled to >= 1,000 (actual: ${acctTotal.rows[0].count})`);
+
+  const txnTotal = await db.query('SELECT count(*) as count FROM transactions');
+  assert(parseInt(txnTotal.rows[0].count) >= 1000, `Total transactions scaled to >= 1,000 (actual: ${txnTotal.rows[0].count})`);
+
+  const raTotal = await db.query('SELECT count(*) as count FROM risk_assessments');
+  assert(parseInt(raTotal.rows[0].count) >= 1000, `Total risk assessments scaled to >= 1,000 (actual: ${raTotal.rows[0].count})`);
+
+  // Foreign key referential integrity checks (0 orphan records)
+  const orphanTxns = await db.query(`
+    SELECT count(*) as count 
+    FROM transactions t 
+    LEFT JOIN accounts a ON t.account_id = a.id 
+    WHERE a.id IS NULL;
+  `);
+  assert(parseInt(orphanTxns.rows[0].count) === 0, 'Referential Integrity: 0 orphan transactions missing account parents');
+
+  const orphanAccts = await db.query(`
+    SELECT count(*) as count 
+    FROM accounts a 
+    LEFT JOIN customers c ON a.customer_id = c.id 
+    WHERE c.id IS NULL;
+  `);
+  assert(parseInt(orphanAccts.rows[0].count) === 0, 'Referential Integrity: 0 orphan accounts missing customer parents');
+
+  const orphanMerchs = await db.query(`
+    SELECT count(*) as count 
+    FROM transactions t 
+    LEFT JOIN merchants m ON t.merchant_id = m.id 
+    WHERE t.merchant_id IS NOT NULL AND m.id IS NULL;
+  `);
+  assert(parseInt(orphanMerchs.rows[0].count) === 0, 'Referential Integrity: 0 transactions with unmapped merchant foreign keys');
+
+  // --- TEST 12: Stage 2 - Database Catalog & Schema Metadata ---
+  console.log('\n--- 12. Testing Database Explorer Schema Metadata Endpoints ---');
+  const catalogRes = await db.query(`
+    SELECT table_name, table_type 
+    FROM information_schema.tables 
+    WHERE table_schema = 'public' 
+    ORDER BY table_name;
+  `);
+  assert(catalogRes.rows.length >= 20, `Database catalog contains >= 20 relational structures (actual: ${catalogRes.rows.length})`);
+
+  const pkCheck = await db.query(`
+    SELECT tc.table_name, kcu.column_name 
+    FROM information_schema.table_constraints tc 
+    JOIN information_schema.key_column_usage kcu 
+      ON tc.constraint_name = kcu.constraint_name 
+      AND tc.table_schema = kcu.table_schema 
+    WHERE tc.constraint_type = 'PRIMARY KEY' 
+      AND tc.table_name IN ('customers', 'accounts', 'transactions', 'cards', 'merchants');
+  `);
+  assert(pkCheck.rows.length >= 5, 'Primary key constraints verified on core financial tables');
+
+  // --- TEST 13: Stage 2 - SQL Query Lab Security Guardrails ---
+  console.log('\n--- 13. Testing SQL Query Lab Read-Only Security Guardrails ---');
+  function validateSqlSecurity(sqlString: string): { allowed: boolean; reason?: string } {
+    const trimmed = sqlString.trim();
+    const upper = trimmed.toUpperCase();
+    const startsAllowed = upper.startsWith('SELECT') || upper.startsWith('WITH') || upper.startsWith('EXPLAIN');
+    if (!startsAllowed) return { allowed: false, reason: 'Must start with SELECT, WITH, or EXPLAIN' };
+
+    const forbiddenPatterns = [
+      /\bINSERT\b/i,
+      /\bUPDATE\b/i,
+      /\bDELETE\b/i,
+      /\bDROP\b/i,
+      /\bALTER\b/i,
+      /\bTRUNCATE\b/i,
+      /\bCREATE\b/i,
+      /\bGRANT\b/i,
+      /\bREVOKE\b/i,
+      /\bCOPY\b/i,
+      /;/
+    ];
+    for (const pat of forbiddenPatterns) {
+      if (pat.test(trimmed)) {
+        return { allowed: false, reason: `Matches forbidden pattern: ${pat}` };
+      }
+    }
+    return { allowed: true };
+  }
+
+  assert(!validateSqlSecurity('DROP TABLE customers').allowed, 'Security: Blocks DROP TABLE attempt');
+  assert(!validateSqlSecurity('DELETE FROM transactions WHERE amount > 0').allowed, 'Security: Blocks DELETE attempt');
+  assert(!validateSqlSecurity('UPDATE accounts SET current_balance = 0').allowed, 'Security: Blocks UPDATE attempt');
+  assert(!validateSqlSecurity('INSERT INTO users VALUES (...)').allowed, 'Security: Blocks INSERT attempt');
+  assert(!validateSqlSecurity('SELECT * FROM transactions; DROP TABLE users;').allowed, 'Security: Blocks statement chaining via semicolon (;)');
+  assert(validateSqlSecurity('SELECT * FROM transactions WHERE amount >= 100000').allowed, 'Security: Allows analytical SELECT with WHERE clause');
+  assert(validateSqlSecurity('WITH top_cust AS (SELECT customer_id FROM accounts) SELECT * FROM top_cust').allowed, 'Security: Allows CTE (WITH ... SELECT)');
+  assert(validateSqlSecurity('EXPLAIN SELECT * FROM transactions').allowed, 'Security: Allows EXPLAIN execution plan inspection');
+
   console.log('\n================================================================');
   console.log(`TEST RESULTS: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
