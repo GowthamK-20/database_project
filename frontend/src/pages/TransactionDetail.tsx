@@ -3,6 +3,8 @@ import { api } from '../services/api';
 import { Currency } from '../components/common/Currency';
 import { RiskBadge } from '../components/common/RiskBadge';
 import { StatusBadge } from '../components/common/StatusBadge';
+import { StatutoryDossierModal } from '../components/common/StatutoryDossierModal';
+import { sounds } from '../utils/soundEffects';
 import {
   ArrowLeft,
   ShieldAlert,
@@ -14,6 +16,7 @@ import {
   AlertTriangle,
   CheckCircle,
   ExternalLink,
+  Printer,
 } from 'lucide-react';
 
 interface TransactionDetailProps {
@@ -29,6 +32,7 @@ export const TransactionDetail: React.FC<TransactionDetailProps> = ({
 }) => {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDossierOpen, setIsDossierOpen] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -65,24 +69,37 @@ export const TransactionDetail: React.FC<TransactionDetailProps> = ({
           className="flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-slate-200 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>BACK TO TRANSACTION EXPLORER</span>
+          <span>BACK TO TRANSACTION LEDGER</span>
         </button>
 
-        {associatedAlert && (
-          <div className="flex items-center gap-2">
-            <span className="text-2xs font-mono text-slate-400">LINKED ALERT:</span>
-            <span className="text-xs font-mono font-bold text-amber-400">{associatedAlert.alert_code}</span>
-            {associatedAlert.case_id && onNavigateToCase && (
-              <button
-                onClick={() => onNavigateToCase(associatedAlert.case_id)}
-                className="flex items-center gap-1 px-2.5 py-1 text-2xs font-mono rounded bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 transition-colors"
-              >
-                <span>OPEN CASE [{associatedAlert.case_number}]</span>
-                <ExternalLink className="w-3 h-3" />
-              </button>
-            )}
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => {
+              sounds.playClick();
+              setIsDossierOpen(true);
+            }}
+            className="flex items-center gap-1.5 px-2.5 py-1 text-2xs font-mono rounded bg-amber-500/10 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 transition-colors"
+          >
+            <Printer className="w-3 h-3 text-amber-400" />
+            <span>FIR DOSSIER</span>
+          </button>
+
+          {associatedAlert && (
+            <div className="flex items-center gap-2">
+              <span className="text-2xs font-mono text-slate-400">LINKED ALERT:</span>
+              <span className="text-xs font-mono font-bold text-amber-400">{associatedAlert.alert_code}</span>
+              {associatedAlert.case_id && onNavigateToCase && (
+                <button
+                  onClick={() => onNavigateToCase(associatedAlert.case_id)}
+                  className="flex items-center gap-1 px-2.5 py-1 text-2xs font-mono rounded bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 transition-colors"
+                >
+                  <span>OPEN CASE [{associatedAlert.case_number}]</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* TOP FORENSIC HEADER */}
@@ -116,8 +133,8 @@ export const TransactionDetail: React.FC<TransactionDetailProps> = ({
       </div>
 
       {/* UNIQUE FEATURE: FORENSIC TRANSACTION STORY */}
-      <div className="bg-veyra-900 border border-blue-900/40 rounded p-4 space-y-2">
-        <div className="flex items-center gap-2 text-xs font-bold font-mono text-blue-400 uppercase tracking-wide">
+      <div className="bg-veyra-900 border border-amber-800/40 rounded p-4 space-y-2">
+        <div className="flex items-center gap-2 text-xs font-bold font-mono text-amber-400 uppercase tracking-wide">
           <FileText className="w-4 h-4" />
           <span>SYNTHESIZED FORENSIC TRANSACTION STORY</span>
         </div>
@@ -222,7 +239,7 @@ export const TransactionDetail: React.FC<TransactionDetailProps> = ({
           {/* CUSTOMER & ACCOUNT DOSSIER */}
           <div className="bg-veyra-900 border border-veyra-800/80 rounded p-4 space-y-3 font-mono text-2xs">
             <div className="flex items-center gap-2 text-xs font-bold text-slate-100 uppercase border-b border-veyra-800 pb-2">
-              <User className="w-3.5 h-3.5 text-blue-400" />
+              <User className="w-3.5 h-3.5 text-amber-400" />
               <span>CUSTOMER & ACCOUNT DOSSIER</span>
             </div>
 
@@ -265,7 +282,7 @@ export const TransactionDetail: React.FC<TransactionDetailProps> = ({
           {/* DEVICE & NETWORK INTELLIGENCE */}
           <div className="bg-veyra-900 border border-veyra-800/80 rounded p-4 space-y-3 font-mono text-2xs">
             <div className="flex items-center gap-2 text-xs font-bold text-slate-100 uppercase border-b border-veyra-800 pb-2">
-              <Smartphone className="w-3.5 h-3.5 text-blue-400" />
+              <Smartphone className="w-3.5 h-3.5 text-amber-400" />
               <span>DEVICE & TELEMETRY</span>
             </div>
 
@@ -308,6 +325,12 @@ export const TransactionDetail: React.FC<TransactionDetailProps> = ({
           </div>
         </div>
       </div>
+
+      <StatutoryDossierModal
+        isOpen={isDossierOpen}
+        onClose={() => setIsDossierOpen(false)}
+        transactionData={t}
+      />
     </div>
   );
 };

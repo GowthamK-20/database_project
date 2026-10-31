@@ -72,18 +72,20 @@ export const RuleSimulator: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* HEADER */}
-      <div className="border-b border-veyra-800 pb-3">
-        <div className="flex items-center gap-2">
-          <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
-            RISK RULE ENGINE // HISTORICAL BACKTESTING SIMULATOR
-          </h1>
-          <span className="text-2xs font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
-            OFFLINE REPLAY CAPABLE
-          </span>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-veyra-800 pb-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
+              RULE ENGINE & SIMULATOR
+            </h1>
+            <span className="text-2xs font-mono text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
+              HISTORICAL BACKTESTING
+            </span>
+          </div>
+          <p className="text-xs text-slate-400 mt-0.5">
+            Calibrate detection thresholds and evaluate false-positive impact against historical transactions before production deployment.
+          </p>
         </div>
-        <p className="text-xs text-slate-400 mt-0.5">
-          Calibrate detection thresholds and simulate false-alarm impacts against historical transactions before pushing to production.
-        </p>
       </div>
 
       {/* TOP SECTION: SIMULATOR WORKBENCH */}
@@ -104,7 +106,7 @@ export const RuleSimulator: React.FC = () => {
                 type="number"
                 value={minAmount}
                 onChange={(e) => setMinAmount(e.target.value)}
-                className="w-full bg-veyra-950 border border-veyra-750 focus:border-blue-500 rounded px-3 py-1.5 text-slate-100 outline-none"
+                className="w-full bg-veyra-950 border border-veyra-750 focus:border-amber-500 rounded px-3 py-1.5 text-slate-100 outline-none"
               />
             </div>
 
@@ -113,7 +115,7 @@ export const RuleSimulator: React.FC = () => {
               <select
                 value={channel}
                 onChange={(e) => setChannel(e.target.value)}
-                className="w-full bg-veyra-950 border border-veyra-750 focus:border-blue-500 rounded px-2.5 py-1.5 text-slate-100 outline-none"
+                className="w-full bg-veyra-950 border border-veyra-750 focus:border-amber-500 rounded px-2.5 py-1.5 text-slate-100 outline-none"
               >
                 <option value="ALL">ALL CHANNELS</option>
                 <option value="UPI">UPI</option>
@@ -129,7 +131,7 @@ export const RuleSimulator: React.FC = () => {
                   type="checkbox"
                   checked={nightWindowOnly}
                   onChange={(e) => setNightWindowOnly(e.target.checked)}
-                  className="rounded bg-veyra-950 border-veyra-700 text-blue-600"
+                  className="rounded bg-veyra-950 border-veyra-700 text-amber-500 focus:ring-amber-500/50"
                 />
                 <span>Night-time window constraint (01:00 AM – 05:00 AM IST)</span>
               </label>
@@ -139,7 +141,7 @@ export const RuleSimulator: React.FC = () => {
                   type="checkbox"
                   checked={isRootedOnly}
                   onChange={(e) => setIsRootedOnly(e.target.checked)}
-                  className="rounded bg-veyra-950 border-veyra-700 text-blue-600"
+                  className="rounded bg-veyra-950 border-veyra-700 text-amber-500 focus:ring-amber-500/50"
                 />
                 <span>Compromised/Rooted OS signature verified</span>
               </label>
@@ -149,7 +151,7 @@ export const RuleSimulator: React.FC = () => {
                   type="checkbox"
                   checked={isVpnOnly}
                   onChange={(e) => setIsVpnOnly(e.target.checked)}
-                  className="rounded bg-veyra-950 border-veyra-700 text-blue-600"
+                  className="rounded bg-veyra-950 border-veyra-700 text-amber-500 focus:ring-amber-500/50"
                 />
                 <span>Anonymized VPN or Tor exit gateway</span>
               </label>
@@ -158,7 +160,7 @@ export const RuleSimulator: React.FC = () => {
             <button
               type="submit"
               disabled={isSimulating}
-              className="w-full mt-4 flex items-center justify-center gap-2 py-2 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold transition-colors shadow"
+              className="w-full mt-4 flex items-center justify-center gap-2 py-2 rounded bg-amber-500 hover:bg-amber-400 text-black font-bold transition-colors shadow-[0_0_15px_rgba(245,158,11,0.3)]"
             >
               <Play className={`w-3.5 h-3.5 ${isSimulating ? 'animate-spin' : ''}`} />
               <span>RUN HISTORICAL REPLAY SIMULATION</span>

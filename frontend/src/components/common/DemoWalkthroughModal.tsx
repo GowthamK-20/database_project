@@ -142,7 +142,7 @@ export const DemoWalkthroughModal: React.FC<DemoWalkthroughModalProps> = ({
         {/* MODAL HEADER */}
         <div className="p-4 bg-veyra-850 border-b border-veyra-800 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
+            <div className="w-7 h-7 rounded bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
               <Compass className="w-4 h-4" />
             </div>
             <div>
@@ -178,12 +178,12 @@ export const DemoWalkthroughModal: React.FC<DemoWalkthroughModalProps> = ({
                 onClick={() => setActiveScenarioId(sc.id)}
                 className={`w-full p-3.5 text-left transition-colors flex flex-col gap-1 ${
                   activeScenarioId === sc.id
-                    ? 'bg-blue-600/15 border-l-2 border-l-blue-500'
+                    ? 'bg-amber-500/15 border-l-2 border-l-amber-400'
                     : 'hover:bg-veyra-850/60'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-2xs font-mono text-blue-400 font-bold uppercase">
+                  <span className="text-2xs font-mono text-amber-400 font-bold uppercase">
                     SCENARIO 0{sc.id}
                   </span>
                   <span className="text-3xs font-mono text-slate-400 bg-veyra-850 px-1.5 py-0.5 rounded border border-veyra-800">
@@ -204,7 +204,7 @@ export const DemoWalkthroughModal: React.FC<DemoWalkthroughModalProps> = ({
           <div className="md:col-span-7 p-6 overflow-y-auto flex flex-col justify-between space-y-4 bg-veyra-900">
             <div className="space-y-4">
               <div className="space-y-1">
-                <span className="text-2xs font-mono text-blue-400 uppercase tracking-wider font-bold">
+                <span className="text-2xs font-mono text-amber-400 uppercase tracking-wider font-bold">
                   SCENARIO 0{activeScenario.id} DOSSIER
                 </span>
                 <h3 className="text-base font-bold text-slate-100 font-sans">
@@ -243,7 +243,7 @@ export const DemoWalkthroughModal: React.FC<DemoWalkthroughModalProps> = ({
             <div className="pt-4 border-t border-veyra-800">
               <button
                 onClick={() => handleLaunchScenario(activeScenario)}
-                className="w-full py-2.5 px-4 rounded bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition-colors flex items-center justify-center gap-2 shadow-lg"
+                className="w-full py-2.5 px-4 rounded bg-amber-500 hover:bg-amber-400 text-black font-mono text-xs font-bold transition-colors flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.3)]"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
                 <span>{activeScenario.actionLabel}</span>

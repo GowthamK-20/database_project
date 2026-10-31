@@ -19,13 +19,20 @@ export const MerchantIntel: React.FC = () => {
   return (
     <div className="space-y-4 max-w-7xl mx-auto">
       {/* HEADER */}
-      <div className="border-b border-veyra-800 pb-3">
-        <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
-          MERCHANT & COUNTERPARTY RISK INTELLIGENCE
-        </h1>
-        <p className="text-xs text-slate-400 mt-0.5">
-          Monitor merchant chargeback ratios, MCC classifications, and aggregate flagged fraud exposure.
-        </p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-veyra-800 pb-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
+              MERCHANT INTELLIGENCE
+            </h1>
+            <span className="text-2xs font-mono text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
+              COUNTERPARTY SURVEILLANCE
+            </span>
+          </div>
+          <p className="text-xs text-slate-400 mt-0.5">
+            Monitor merchant chargeback ratios, MCC classifications, and aggregate flagged fraud exposure.
+          </p>
+        </div>
       </div>
 
       {/* MERCHANTS TABLE */}

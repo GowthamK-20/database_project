@@ -24,7 +24,7 @@ export const MetricBox: React.FC<MetricBoxProps> = ({
       case 'critical': return 'text-red-400 bg-red-950/40 border-red-800/60';
       case 'warning': return 'text-amber-400 bg-amber-950/40 border-amber-800/60';
       case 'safe': return 'text-emerald-400 bg-emerald-950/40 border-emerald-800/60';
-      default: return 'text-blue-400 bg-blue-950/40 border-blue-800/60';
+      default: return 'text-amber-300 bg-amber-950/40 border-amber-800/60';
     }
   };
 

@@ -32,7 +32,7 @@ export const AnalyticsReports: React.FC = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `VEYRA_RBI_STR_REPORT_${Date.now()}.csv`);
+    link.setAttribute('download', `FINGUARD_RBI_STR_REPORT_${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -43,9 +43,14 @@ export const AnalyticsReports: React.FC = () => {
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-veyra-800 pb-3">
         <div>
-          <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
-            RISK ANALYTICS & REGULATORY COMPLIANCE
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
+              ANALYTICS & COMPLIANCE REPORTS
+            </h1>
+            <span className="text-2xs font-mono text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
+              REGULATORY INTELLIGENCE
+            </span>
+          </div>
           <p className="text-xs text-slate-400 mt-0.5">
             Macro fraud trends, analyst operational performance, and RBI/PMLA Suspicious Transaction Reporting (STR).
           </p>
@@ -56,7 +61,7 @@ export const AnalyticsReports: React.FC = () => {
           <button
             onClick={() => setActiveTab('ANALYTICS')}
             className={`px-3 py-1 rounded transition-colors ${
-              activeTab === 'ANALYTICS' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'
+              activeTab === 'ANALYTICS' ? 'bg-amber-500 text-black font-bold shadow-[0_0_12px_rgba(245,158,11,0.25)]' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             METRICS & WORKLOAD
@@ -64,7 +69,7 @@ export const AnalyticsReports: React.FC = () => {
           <button
             onClick={() => setActiveTab('STR_REPORT')}
             className={`px-3 py-1 rounded transition-colors ${
-              activeTab === 'STR_REPORT' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'
+              activeTab === 'STR_REPORT' ? 'bg-amber-500 text-black font-bold shadow-[0_0_12px_rgba(245,158,11,0.25)]' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             RBI STR COMPLIANCE EXTRACT
@@ -149,7 +154,7 @@ export const AnalyticsReports: React.FC = () => {
                       </div>
                       <div>
                         <span>ACTIVE ALERTS:</span>
-                        <strong className="text-blue-400 block">{w.active_alerts}</strong>
+                        <strong className="text-amber-300 block">{w.active_alerts}</strong>
                       </div>
                       <div>
                         <span>CONFIRMED FRAUD:</span>
@@ -177,7 +182,7 @@ export const AnalyticsReports: React.FC = () => {
 
             <button
               onClick={handleExportCSV}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs transition-colors font-semibold"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-amber-500 hover:bg-amber-400 text-black font-mono text-xs transition-colors font-bold shadow-[0_0_15px_rgba(245,158,11,0.3)]"
             >
               <Download className="w-3.5 h-3.5" />
               <span>EXPORT COMPLIANT CSV</span>

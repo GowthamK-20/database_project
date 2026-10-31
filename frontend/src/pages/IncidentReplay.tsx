@@ -207,13 +207,10 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase flex items-center gap-2">
               <Terminal className="w-4 h-4 text-rose-400" />
-              INCIDENT REPLAY & ADVERSARIAL SIMULATION SUITE
+              INCIDENT REPLAY & SCENARIO TESTING
             </h1>
             <span className="text-2xs font-mono text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-800/40">
-              5 HISTORICAL DOSSIERS
-            </span>
-            <span className="text-2xs font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
-              POSTGRESQL 18 BACKTESTED
+              5 VERIFIED DOSSIERS
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -259,7 +256,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({
                           ? 'bg-rose-950/60 text-rose-400 border border-rose-800/60'
                           : d.severity === 'HIGH'
                           ? 'bg-amber-950/60 text-amber-400 border border-amber-800/60'
-                          : 'bg-blue-950/60 text-blue-400 border border-blue-800/60'
+                          : 'bg-amber-950/60 text-amber-400 border border-amber-800/60'
                       }`}
                     >
                       {d.severity}
@@ -300,7 +297,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({
 
               <div className="flex items-center gap-2">
                 <span className="text-2xs font-mono text-slate-400">DUTY OFFICER:</span>
-                <span className="text-2xs font-mono text-blue-300 font-semibold bg-blue-950/40 px-2 py-1 rounded border border-blue-800/40">
+                <span className="text-2xs font-mono text-amber-300 font-semibold bg-amber-950/40 px-2 py-1 rounded border border-amber-800/40">
                   {activeDossier.operator}
                 </span>
               </div>
@@ -324,7 +321,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({
 
               <div className="bg-veyra-950 p-2.5 rounded border border-veyra-800">
                 <span className="text-slate-500 uppercase block">PAYMENT RAIL</span>
-                <span className="font-bold text-blue-400 mt-0.5 block truncate">
+                <span className="font-bold text-amber-400 mt-0.5 block truncate">
                   {activeDossier.channel}
                 </span>
               </div>
@@ -351,7 +348,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
               <div className="space-y-2 bg-veyra-950 p-3 rounded border border-veyra-800">
                 <div className="text-2xs font-mono text-slate-400 uppercase font-semibold flex items-center gap-1.5">
-                  <Fingerprint className="w-3.5 h-3.5 text-blue-400" />
+                  <Fingerprint className="w-3.5 h-3.5 text-amber-400" />
                   <span>TECHNICAL EVIDENCE ARTIFACTS</span>
                 </div>
                 <div className="space-y-1.5">
@@ -383,12 +380,12 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({
             {/* ACTION LAUNCH BAR */}
             <div className="pt-2 border-t border-veyra-800 flex items-center justify-between">
               <div className="text-2xs font-mono text-slate-400">
-                Switch role to <strong className="text-blue-300">{activeDossier.operator}</strong> and execute live deep-dive.
+                Switch role to <strong className="text-amber-300">{activeDossier.operator}</strong> and execute live deep-dive.
               </div>
 
               <button
                 onClick={handleLaunch}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded text-2xs font-mono font-bold bg-blue-600 hover:bg-blue-500 text-white transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded text-2xs font-mono font-bold bg-amber-500 hover:bg-amber-400 text-black transition-all shadow-[0_0_12px_rgba(245,158,11,0.25)]"
               >
                 <span>{activeDossier.actionTitle}</span>
                 <ChevronRight className="w-3.5 h-3.5" />

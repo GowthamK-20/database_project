@@ -30,10 +30,10 @@ export const AuditLedger: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
-              IMMUTABLE AUDIT LEDGER // SYSTEM JOURNAL
+              IMMUTABLE AUDIT LEDGER
             </h1>
             <span className="text-2xs font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
-              TAMPER-EVIDENT
+              TAMPER-EVIDENT JOURNAL
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -59,7 +59,7 @@ export const AuditLedger: React.FC = () => {
             onClick={() => setEntityFilter(ent)}
             className={`px-2 py-1 rounded transition-colors ${
               entityFilter === ent
-                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-semibold'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -102,7 +102,7 @@ export const AuditLedger: React.FC = () => {
                     <span className="text-slate-500">[{log.user_badge || 'OP'}]</span>
                   </td>
                   <td className="py-2 px-3">
-                    <span className="text-blue-400 bg-blue-950/40 px-1.5 py-0.5 rounded border border-blue-900/60 font-semibold">
+                    <span className="text-amber-400 bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-800/40 font-semibold">
                       {log.action}
                     </span>
                   </td>

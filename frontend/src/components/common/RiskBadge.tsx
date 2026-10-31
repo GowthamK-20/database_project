@@ -25,7 +25,7 @@ export const RiskBadge: React.FC<RiskBadgeProps> = ({
       case 'MEDIUM':
         return 'bg-amber-950/40 text-amber-400 border-amber-800/60';
       case 'LOW':
-        return 'bg-blue-950/40 text-blue-400 border-blue-800/60';
+        return 'bg-slate-800/80 text-slate-300 border-slate-700/80';
       case 'SAFE':
       default:
         return 'bg-emerald-950/40 text-emerald-400 border-emerald-800/60';
@@ -41,7 +41,7 @@ export const RiskBadge: React.FC<RiskBadgeProps> = ({
       case 'MEDIUM':
         return 'bg-amber-500';
       case 'LOW':
-        return 'bg-blue-500';
+        return 'bg-slate-400';
       case 'SAFE':
       default:
         return 'bg-emerald-500';

@@ -27,7 +27,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' })
         return 'bg-red-950/30 text-red-300 border-red-800/40';
       case 'NEW':
       case 'OPEN':
-        return 'bg-blue-950/30 text-blue-300 border-blue-800/40';
+        return 'bg-amber-950/40 text-amber-300 border-amber-800/40';
       case 'DORMANT':
       case 'DISMISSED':
       case 'CLOSED':

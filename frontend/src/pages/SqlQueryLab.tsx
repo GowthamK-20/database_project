@@ -187,19 +187,22 @@ LIMIT 50;`
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-blue-400" />
-              SQL QUERY LAB // EDUCATIONAL RISK & FRAUD ANALYTICS
+              <Terminal className="w-4 h-4 text-amber-400" />
+              ANALYTICAL SQL LAB
             </h1>
             <span className="text-2xs font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40 flex items-center gap-1">
               <ShieldCheck className="w-3 h-3 text-emerald-400" />
               READ-ONLY GUARDED
             </span>
-            <span className="text-2xs font-mono text-blue-400 bg-blue-950/40 px-2 py-0.5 rounded border border-blue-800/40">
+            <span className="text-2xs font-mono text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-800/40">
+              ADMIN ACCESS ONLY
+            </span>
+            <span className="text-2xs font-mono text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
               SAFETY CAP: 500 ROWS
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
-            Execute analytical SELECT, JOIN, GROUP BY, and EXPLAIN queries against the 1,000+ customer banking database.
+            Execute analytical SELECT, JOIN, GROUP BY, and EXPLAIN queries against the institutional banking database.
           </p>
         </div>
 
@@ -217,7 +220,7 @@ LIMIT 50;`
           <button
             onClick={() => handleExecute()}
             disabled={isRunning || !sql.trim()}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-2xs font-mono font-bold rounded bg-blue-600 hover:bg-blue-500 text-white transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-2xs font-mono font-bold rounded bg-amber-500 hover:bg-amber-400 text-black transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Play className={`w-3.5 h-3.5 ${isRunning ? 'animate-spin' : 'fill-current'}`} />
             <span>{isRunning ? 'EXECUTING...' : 'RUN QUERY (Ctrl+Enter)'}</span>
@@ -227,16 +230,16 @@ LIMIT 50;`
 
       {/* SECURITY NOTICE BANNER */}
       <div className="bg-veyra-900/80 border border-veyra-800 rounded p-3 flex items-start gap-3 text-2xs font-mono">
-        <ShieldCheck className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+        <ShieldCheck className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
         <div className="text-slate-300 space-y-1">
           <div className="text-slate-200 font-semibold flex items-center gap-2">
-            <span>SECURE ACADEMIC SQL SANDBOX</span>
+            <span>SECURE ANALYTICAL QUERY ENGINE</span>
             <span className="text-3xs text-emerald-400 bg-emerald-950/50 px-1.5 py-0.2 rounded border border-emerald-800/40">
               ACTIVE
             </span>
           </div>
           <p className="text-slate-400 leading-relaxed">
-            Multi-tier backend validation strictly permits <code className="text-blue-300">SELECT</code>, <code className="text-blue-300">WITH</code> (CTEs), and <code className="text-blue-300">EXPLAIN</code> operations. Destructive DDL/DML statements (<code className="text-red-400">DROP</code>, <code className="text-red-400">DELETE</code>, <code className="text-red-400">UPDATE</code>, <code className="text-red-400">ALTER</code>, <code className="text-red-400">TRUNCATE</code>) and statement chaining are automatically rejected at the API gateway.
+            Multi-tier backend validation strictly permits <code className="text-amber-300">SELECT</code>, <code className="text-amber-300">WITH</code> (CTEs), and <code className="text-amber-300">EXPLAIN</code> operations. Destructive DDL/DML statements (<code className="text-red-400">DROP</code>, <code className="text-red-400">DELETE</code>, <code className="text-red-400">UPDATE</code>, <code className="text-red-400">ALTER</code>, <code className="text-red-400">TRUNCATE</code>) and statement chaining are automatically rejected at the API gateway.
           </p>
         </div>
       </div>
@@ -252,7 +255,7 @@ LIMIT 50;`
                 onClick={() => setActiveTab('TEMPLATES')}
                 className={`py-1.5 px-2 rounded text-center transition-colors flex items-center justify-center gap-1.5 ${
                   activeTab === 'TEMPLATES'
-                    ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-semibold'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -267,7 +270,7 @@ LIMIT 50;`
                 }}
                 className={`py-1.5 px-2 rounded text-center transition-colors flex items-center justify-center gap-1.5 ${
                   activeTab === 'HISTORY'
-                    ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-semibold'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -285,12 +288,12 @@ LIMIT 50;`
                     className="p-2.5 rounded bg-veyra-950/60 border border-veyra-800 hover:border-slate-700 transition-colors space-y-1.5 text-left group"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-3xs font-mono px-1.5 py-0.5 rounded bg-blue-950/60 text-blue-300 border border-blue-800/40 uppercase">
+                      <span className="text-3xs font-mono px-1.5 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-800/40 uppercase">
                         {q.category}
                       </span>
                       <button
                         onClick={() => handleSelectTemplate(q)}
-                        className="text-3xs font-mono text-blue-400 hover:text-blue-300 flex items-center gap-1 font-semibold group-hover:underline"
+                        className="text-3xs font-mono text-amber-400 hover:text-amber-300 flex items-center gap-1 font-semibold group-hover:underline"
                       >
                         LOAD SQL ⟶
                       </button>
@@ -367,7 +370,7 @@ LIMIT 50;`
             {/* EDITOR CONTROLS BAR */}
             <div className="bg-veyra-850 px-3 py-2 border-b border-veyra-800 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Code2 className="w-4 h-4 text-blue-400" />
+                <Code2 className="w-4 h-4 text-amber-400" />
                 <span className="text-2xs font-mono text-slate-300 font-bold uppercase">
                   POSTGRESQL EDITOR
                 </span>
@@ -415,7 +418,7 @@ LIMIT 50;`
                 onKeyDown={handleKeyDown}
                 rows={9}
                 placeholder="Write your read-only SELECT query here..."
-                className="w-full bg-veyra-950 p-3.5 font-mono text-xs text-slate-100 placeholder-slate-600 resize-y outline-none leading-relaxed border-none focus:ring-1 focus:ring-blue-500/50"
+                className="w-full bg-veyra-950 p-3.5 font-mono text-xs text-slate-100 placeholder-slate-600 resize-y outline-none leading-relaxed border-none focus:ring-1 focus:ring-amber-500/50"
                 spellCheck={false}
               />
             </div>
@@ -457,7 +460,7 @@ LIMIT 50;`
                   onClick={handleDownloadCsv}
                   className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-veyra-850 hover:bg-veyra-800 border border-veyra-750 text-slate-300 transition-colors"
                 >
-                  <Download className="w-3 h-3 text-blue-400" />
+                  <Download className="w-3 h-3 text-amber-400" />
                   <span>EXPORT CSV</span>
                 </button>
               )}
@@ -484,7 +487,7 @@ LIMIT 50;`
           <div className="bg-veyra-900 border border-veyra-800/80 rounded p-3 space-y-2.5">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold font-mono text-slate-200 uppercase flex items-center gap-2">
-                <FileText className="w-3.5 h-3.5 text-blue-400" />
+                <FileText className="w-3.5 h-3.5 text-amber-400" />
                 QUERY RESULTS
               </h3>
               {queryResult && queryResult.rowCount > 0 && (
@@ -515,7 +518,7 @@ LIMIT 50;`
                           colSpan={(queryResult?.columns?.length || 1) + 1}
                           className="py-12 text-center text-slate-500"
                         >
-                          <Terminal className="w-5 h-5 animate-spin mx-auto mb-2 text-blue-400" />
+                          <Terminal className="w-5 h-5 animate-spin mx-auto mb-2 text-amber-400" />
                           Executing PostgreSQL query...
                         </td>
                       </tr>

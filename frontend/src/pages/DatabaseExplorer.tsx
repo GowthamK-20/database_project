@@ -180,18 +180,18 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase flex items-center gap-2">
-              <Database className="w-4 h-4 text-blue-400" />
-              DATABASE EXPLORER // SCHEMA & STORAGE ENGINE
+              <Database className="w-4 h-4 text-amber-400" />
+              DATABASE EXPLORER
             </h1>
-            <span className="text-2xs font-mono text-blue-400 bg-blue-950/40 px-2 py-0.5 rounded border border-blue-800/40">
-              {catalog?.databaseDialect || 'POSTGRESQL'}
+            <span className="text-2xs font-mono text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
+              {catalog?.databaseDialect || 'POSTGRESQL 18'}
             </span>
-            <span className="text-2xs font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
-              MODE: {catalog?.mode || 'CONNECTED'}
+            <span className="text-2xs font-mono text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded border border-rose-800/40">
+              ADMIN ACCESS ONLY
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
-            Real-time schema browser, relational dictionary, index statistics, and paginated data viewer backed by live PostgreSQL.
+            Schema dictionary, foreign key topology, index statistics, and paginated relation viewer backed by live PostgreSQL.
           </p>
         </div>
 
@@ -199,9 +199,9 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
           {onNavigateToSqlLab && (
             <button
               onClick={() => onNavigateToSqlLab()}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-2xs font-mono rounded bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 text-blue-300 transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1 text-2xs font-mono rounded bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 transition-colors font-semibold"
             >
-              <Code2 className="w-3 h-3" />
+              <Code2 className="w-3 h-3 text-amber-400" />
               <span>OPEN SQL LAB</span>
             </button>
           )}
@@ -234,7 +234,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
 
         <div className="bg-veyra-900 border border-veyra-800/80 rounded p-3">
           <div className="text-2xs font-mono text-slate-400 uppercase">ANALYTICAL VIEWS</div>
-          <div className="text-lg font-bold font-mono text-blue-400 mt-1 flex items-baseline gap-2">
+          <div className="text-lg font-bold font-mono text-amber-400 mt-1 flex items-baseline gap-2">
             <span>{catalog?.totalViews ?? '—'}</span>
             <span className="text-2xs text-slate-500 font-normal">Virtual Projections</span>
           </div>
@@ -282,7 +282,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                 placeholder="Filter tables & views..."
                 value={catalogFilter}
                 onChange={(e) => setCatalogFilter(e.target.value)}
-                className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-blue-500 rounded pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 outline-none font-mono"
+                className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-amber-500 rounded pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 outline-none font-mono"
               />
             </div>
 
@@ -292,7 +292,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                 onClick={() => setActiveTabType('ALL')}
                 className={`py-1 rounded text-center transition-colors ${
                   activeTabType === 'ALL'
-                    ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-semibold'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                     : 'bg-veyra-950 text-slate-400 hover:text-slate-200 border border-veyra-800'
                 }`}
               >
@@ -302,7 +302,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                 onClick={() => setActiveTabType('TABLES')}
                 className={`py-1 rounded text-center transition-colors ${
                   activeTabType === 'TABLES'
-                    ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-semibold'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                     : 'bg-veyra-950 text-slate-400 hover:text-slate-200 border border-veyra-800'
                 }`}
               >
@@ -312,7 +312,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                 onClick={() => setActiveTabType('VIEWS')}
                 className={`py-1 rounded text-center transition-colors ${
                   activeTabType === 'VIEWS'
-                    ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-semibold'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                     : 'bg-veyra-950 text-slate-400 hover:text-slate-200 border border-veyra-800'
                 }`}
               >
@@ -342,13 +342,13 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                       onClick={() => handleTableSelect(tbl.name)}
                       className={`w-full text-left px-3 py-2 rounded text-xs transition-colors flex items-center justify-between border ${
                         isSelected
-                          ? 'bg-blue-600/20 text-blue-200 border-blue-500/50 shadow-sm'
+                          ? 'bg-amber-500/20 text-amber-200 border-amber-500/50 shadow-sm'
                           : 'bg-veyra-950/60 hover:bg-veyra-850/80 text-slate-300 border-veyra-800/80'
                       }`}
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         {isView ? (
-                          <Layers className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
+                          <Layers className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
                         ) : (
                           <Table className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
                         )}
@@ -381,7 +381,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
           <div className="bg-veyra-900 border border-veyra-800/80 rounded p-3.5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded bg-veyra-850 border border-veyra-750 text-blue-400">
+                <div className="p-2 rounded bg-veyra-850 border border-veyra-750 text-amber-400">
                   {selectedTableMeta?.type === 'VIEW' ? (
                     <Layers className="w-5 h-5" />
                   ) : (
@@ -428,7 +428,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleOpenInSqlLab}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded text-2xs font-mono bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded text-2xs font-mono bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 transition-colors"
                 >
                   <Code2 className="w-3.5 h-3.5" />
                   <span>QUERY TABLE IN SQL LAB</span>
@@ -442,7 +442,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                 onClick={() => setActiveViewMode('DATA')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors ${
                   activeViewMode === 'DATA'
-                    ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-semibold'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -454,7 +454,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                 onClick={() => setActiveViewMode('SCHEMA')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors ${
                   activeViewMode === 'SCHEMA'
-                    ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-semibold'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -466,7 +466,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                 onClick={() => setActiveViewMode('RELATIONS')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded transition-colors ${
                   activeViewMode === 'RELATIONS'
-                    ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-semibold'
+                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -488,7 +488,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                     placeholder="Search across text fields..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-blue-500 rounded pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 outline-none font-mono"
+                    className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-amber-500 rounded pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 outline-none font-mono"
                   />
                 </form>
 
@@ -519,7 +519,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                     className="flex items-center gap-1.5 px-2.5 py-1 text-2xs font-mono rounded bg-veyra-850 hover:bg-veyra-800 border border-veyra-750 text-slate-300 disabled:opacity-50 transition-colors"
                     title="Export Current Table Records to CSV"
                   >
-                    <Download className="w-3.5 h-3.5 text-blue-400" />
+                    <Download className="w-3.5 h-3.5 text-amber-400" />
                     <span>EXPORT CSV</span>
                   </button>
 
@@ -561,13 +561,13 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                                   )}
                                   {col.foreignKey && (
                                     <span title={`FK -> ${col.foreignKey.foreign_table}.${col.foreignKey.foreign_column}`}>
-                                      <LinkIcon className="w-2.5 h-2.5 text-blue-400" />
+                                      <LinkIcon className="w-2.5 h-2.5 text-amber-400" />
                                     </span>
                                   )}
                                   <span className={col.isPrimaryKey ? 'text-amber-200 font-bold' : ''}>
                                     {col.column_name}
                                   </span>
-                                  <ArrowUpDown className={`w-2.5 h-2.5 ${isSorted ? 'text-blue-400' : 'text-slate-600'}`} />
+                                  <ArrowUpDown className={`w-2.5 h-2.5 ${isSorted ? 'text-amber-400' : 'text-slate-600'}`} />
                                 </div>
                                 <div className="text-3xs text-slate-500 font-normal lowercase tracking-normal">
                                   {col.data_type}
@@ -585,7 +585,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                               colSpan={tableData?.columns?.length || 1}
                               className="py-12 text-center text-slate-500"
                             >
-                              <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-blue-400" />
+                              <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-amber-400" />
                               Querying table data...
                             </td>
                           </tr>
@@ -746,7 +746,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                           )}
                           <span>{col.column_name}</span>
                         </td>
-                        <td className="py-2.5 px-3 text-blue-300 font-mono">
+                        <td className="py-2.5 px-3 text-amber-300 font-mono">
                           {col.data_type}
                         </td>
                         <td className="py-2.5 px-3">
@@ -774,7 +774,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                         </td>
                         <td className="py-2.5 px-3">
                           {col.foreignKey ? (
-                            <span className="flex items-center gap-1 text-blue-400 text-3xs bg-blue-950/40 px-2 py-0.5 rounded border border-blue-800/40">
+                            <span className="flex items-center gap-1 text-amber-400 text-3xs bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
                               <LinkIcon className="w-2.5 h-2.5" />
                               REFERENCES {col.foreignKey.foreign_table}({col.foreignKey.foreign_column})
                             </span>
@@ -795,11 +795,11 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
             <div className="bg-veyra-900 border border-veyra-800/80 rounded p-4 space-y-4">
               <div className="border-b border-veyra-800 pb-3">
                 <h3 className="text-xs font-bold font-mono text-slate-100 uppercase flex items-center gap-2">
-                  <LinkIcon className="w-4 h-4 text-blue-400" />
+                  <LinkIcon className="w-4 h-4 text-amber-400" />
                   RELATIONAL INTEGRITY & FOREIGN KEY MAPPING
                 </h3>
                 <p className="text-2xs text-slate-400 mt-1">
-                  Foreign key constraints linking <code className="text-blue-300 font-mono">public.{selectedTableName}</code> to parent/child entities in the financial database.
+                  Foreign key constraints linking <code className="text-amber-300 font-mono">public.{selectedTableName}</code> to parent/child entities in the financial database.
                 </p>
               </div>
 
@@ -822,7 +822,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                           {selectedTableName}.{fk.column_name}
                         </div>
                         <span className="text-slate-500 font-bold">⟶</span>
-                        <div className="bg-blue-950/40 border border-blue-800/50 rounded px-2 py-1 text-blue-300">
+                        <div className="bg-amber-950/40 border border-amber-800/50 rounded px-2 py-1 text-amber-300">
                           {fk.foreign_table}.{fk.foreign_column}
                         </div>
                       </div>
@@ -831,7 +831,7 @@ export const DatabaseExplorer: React.FC<DatabaseExplorerProps> = ({ onNavigateTo
                         Ensures referential validity between {selectedTableName} and parent table{' '}
                         <button
                           onClick={() => handleTableSelect(fk.foreign_table)}
-                          className="text-blue-400 underline hover:text-blue-300"
+                          className="text-amber-400 underline hover:text-amber-300"
                         >
                           {fk.foreign_table}
                         </button>

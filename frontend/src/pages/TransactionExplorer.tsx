@@ -122,17 +122,14 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
-              TRANSACTION SURVEILLANCE LEDGER // MULTI-RAIL INGESTION
+              TRANSACTION LEDGER
             </h1>
-            <span className="text-2xs font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded-sm border border-emerald-800/40">
-              POSTGRESQL 18 INDEXED
-            </span>
-            <span className="text-2xs font-mono text-blue-400 bg-blue-950/40 px-2 py-0.5 rounded-sm border border-blue-800/40">
-              {meta.total} TOTAL AUDIT ROWS
+            <span className="text-2xs font-mono text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
+              {meta.total.toLocaleString()} TRANSACTIONS RECORDED
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
-            Query and analyze historical, real-time, and synthetic transactions across UPI, IMPS, NEFT, RTGS, and Card rails.
+            Surveillance ledger across UPI, IMPS, Cards, NEFT, and RTGS payment rails with multi-tier risk evaluation.
           </p>
         </div>
 
@@ -143,7 +140,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
               onClick={() => setDensity('COMPACT')}
               className={`px-2 py-1 rounded-xs transition-colors ${
                 density === 'COMPACT'
-                  ? 'bg-blue-600/20 text-blue-300 font-bold border border-blue-500/40'
+                  ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -153,7 +150,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
               onClick={() => setDensity('STANDARD')}
               className={`px-2 py-1 rounded-xs transition-colors ${
                 density === 'STANDARD'
-                  ? 'bg-blue-600/20 text-blue-300 font-bold border border-blue-500/40'
+                  ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -182,7 +179,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
               placeholder="Search reference, customer name, recipient VPA..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-blue-500 rounded-sm pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 outline-none font-mono"
+              className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-amber-500 rounded-sm pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 outline-none font-mono"
             />
           </div>
 
@@ -191,7 +188,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
             <select
               value={channel}
               onChange={(e) => { setChannel(e.target.value); setPage(1); }}
-              className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-blue-500 rounded-sm px-2.5 py-1.5 text-xs text-slate-200 outline-none font-mono"
+              className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-amber-500 rounded-sm px-2.5 py-1.5 text-xs text-slate-200 outline-none font-mono"
             >
               <option value="">RAIL: ALL CHANNELS</option>
               <option value="UPI">UPI</option>
@@ -208,7 +205,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
             <select
               value={riskTier}
               onChange={(e) => { setRiskTier(e.target.value); setPage(1); }}
-              className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-blue-500 rounded-sm px-2.5 py-1.5 text-xs text-slate-200 outline-none font-mono"
+              className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-amber-500 rounded-sm px-2.5 py-1.5 text-xs text-slate-200 outline-none font-mono"
             >
               <option value="">RISK: ALL TIERS</option>
               <option value="CRITICAL">CRITICAL</option>
@@ -224,7 +221,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
             <select
               value={status}
               onChange={(e) => { setStatus(e.target.value); setPage(1); }}
-              className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-blue-500 rounded-sm px-2.5 py-1.5 text-xs text-slate-200 outline-none font-mono"
+              className="w-full bg-veyra-950 border border-veyra-750/70 focus:border-amber-500 rounded-sm px-2.5 py-1.5 text-xs text-slate-200 outline-none font-mono"
             >
               <option value="">STATUS: ALL</option>
               <option value="SUCCESS">SUCCESS</option>
@@ -277,7 +274,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
                           key={t.transaction_id}
                           onClick={() => setInspectTxnId(t.transaction_id)}
                           className={`hover:bg-veyra-850/80 transition-colors cursor-pointer ${
-                            isSelected ? 'bg-blue-600/15 border-l-2 border-l-blue-400' : ''
+                            isSelected ? 'bg-amber-500/15 border-l-2 border-l-amber-400' : ''
                           }`}
                         >
                           <td className={`${rowPadding} px-3 font-mono font-medium text-slate-200 whitespace-nowrap`}>
@@ -313,7 +310,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
                                 e.stopPropagation();
                                 onSelectTransaction(t.transaction_id);
                               }}
-                              className="p-1 rounded-sm text-slate-400 hover:text-blue-400 hover:bg-veyra-800 transition-colors"
+                              className="p-1 rounded-sm text-slate-400 hover:text-amber-400 hover:bg-veyra-800 transition-colors"
                               title="Open Full Dossier"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
@@ -362,7 +359,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
           <div className="lg:col-span-4 bg-veyra-900 border border-veyra-800 rounded-sm p-3.5 space-y-3 sticky top-4">
             <div className="flex items-center justify-between border-b border-veyra-800 pb-2">
               <div className="flex items-center gap-2">
-                <span className="text-3xs font-mono bg-blue-950/60 text-blue-300 border border-blue-800/40 px-1.5 py-0.5 rounded-sm font-bold uppercase">
+                <span className="text-3xs font-mono bg-amber-950/60 text-amber-300 border border-amber-800/40 px-1.5 py-0.5 rounded-sm font-bold uppercase">
                   FORENSIC DOCK
                 </span>
                 <span className="text-xs font-mono font-bold text-slate-200">
@@ -379,7 +376,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
 
             {isLoadingInspect ? (
               <div className="py-12 text-center text-xs font-mono text-slate-500">
-                <RefreshCw className="w-4 h-4 animate-spin mx-auto mb-2 text-blue-400" />
+                <RefreshCw className="w-4 h-4 animate-spin mx-auto mb-2 text-amber-400" />
                 Retrieving PostgreSQL telemetry...
               </div>
             ) : inspectDetail ? (
@@ -404,7 +401,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-500">RECIPIENT VPA:</span>
-                      <span className="text-blue-300 font-mono truncate max-w-[180px]">
+                      <span className="text-amber-300 font-mono truncate max-w-[180px]">
                         {inspectDetail.transaction.recipient_identifier}
                       </span>
                     </div>
@@ -418,7 +415,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
                 {/* HARDWARE & NETWORK TELEMETRY */}
                 <div className="bg-veyra-950 p-2.5 rounded-sm border border-veyra-800 space-y-1.5 font-mono text-2xs">
                   <div className="text-3xs text-slate-400 uppercase font-semibold flex items-center gap-1.5">
-                    <Fingerprint className="w-3.5 h-3.5 text-blue-400" />
+                    <Fingerprint className="w-3.5 h-3.5 text-amber-400" />
                     <span>TELEMETRY & HARDWARE</span>
                   </div>
 
@@ -487,7 +484,7 @@ export const TransactionExplorer: React.FC<TransactionExplorerProps> = ({ onSele
 
                     <button
                       onClick={() => onSelectTransaction(inspectDetail.transaction.transaction_id)}
-                      className="py-1.5 px-2 rounded-sm bg-blue-600 hover:bg-blue-500 text-white font-bold transition-colors flex items-center justify-center gap-1"
+                      className="py-1.5 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-black font-extrabold transition-colors flex items-center justify-center gap-1 shadow-[0_0_12px_rgba(245,158,11,0.25)]"
                     >
                       <span>FULL DOSSIER</span>
                       <ArrowRight className="w-3 h-3" />

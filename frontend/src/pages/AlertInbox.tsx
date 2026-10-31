@@ -50,14 +50,14 @@ export const AlertInbox: React.FC<AlertInboxProps> = ({ onSelectTransaction }) =
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
-              FRAUD ALERT TRIAGE QUEUE // SOC CONSOLE
+              FRAUD ALERT QUEUE
             </h1>
             <span className="text-2xs font-mono text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
-              {alerts.length} ALERTS
+              {alerts.length} PENDING ALERTS
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
-            Real-time alert ingestion pipeline. SLA timers count down to automatic regulatory escalation.
+            Prioritized fraud alerts with active SLA timers, risk severity indicators, and analyst claim controls.
           </p>
         </div>
 
@@ -66,7 +66,7 @@ export const AlertInbox: React.FC<AlertInboxProps> = ({ onSelectTransaction }) =
           className="flex items-center gap-1.5 px-2.5 py-1 text-2xs font-mono rounded bg-veyra-850 hover:bg-veyra-800 border border-veyra-750 text-slate-300 transition-colors"
         >
           <RefreshCw className={`w-3 h-3 ${isLoading ? 'animate-spin' : ''}`} />
-          <span>POLL ALERTS</span>
+          <span>REFRESH ALERTS</span>
         </button>
       </div>
 
@@ -79,7 +79,7 @@ export const AlertInbox: React.FC<AlertInboxProps> = ({ onSelectTransaction }) =
             onClick={() => setStatusFilter(st)}
             className={`px-2 py-1 rounded text-2xs font-mono transition-colors ${
               statusFilter === st
-                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/40 font-semibold'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold'
                 : 'text-slate-400 hover:text-slate-200 border border-transparent'
             }`}
           >
@@ -138,7 +138,7 @@ export const AlertInbox: React.FC<AlertInboxProps> = ({ onSelectTransaction }) =
                   <td className="py-2.5 px-3 font-mono font-medium text-slate-200">
                     {a.alert_code}
                   </td>
-                  <td className="py-2.5 px-3 font-mono text-2xs text-blue-400 hover:underline cursor-pointer" onClick={() => onSelectTransaction(a.transaction_id)}>
+                  <td className="py-2.5 px-3 font-mono text-2xs text-amber-400 hover:underline cursor-pointer" onClick={() => onSelectTransaction(a.transaction_id)}>
                     {a.txn_reference}
                   </td>
                   <td className="py-2.5 px-3">
@@ -167,7 +167,7 @@ export const AlertInbox: React.FC<AlertInboxProps> = ({ onSelectTransaction }) =
                     {a.alert_status === 'NEW' && (
                       <button
                         onClick={() => handleUpdateStatus(a.alert_id, 'INVESTIGATING')}
-                        className="px-2 py-0.5 rounded text-2xs font-mono bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 transition-colors"
+                        className="px-2 py-0.5 rounded text-2xs font-mono bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 transition-colors"
                       >
                         CLAIM
                       </button>

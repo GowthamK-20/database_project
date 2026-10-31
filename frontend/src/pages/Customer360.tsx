@@ -40,9 +40,14 @@ export const Customer360: React.FC<Customer360Props> = ({ onSelectTransaction })
       {/* HEADER */}
       <div className="flex items-center justify-between border-b border-veyra-800 pb-3 flex-shrink-0">
         <div>
-          <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
-            CUSTOMER 360 // BEHAVIORAL RISK PROFILER
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-sm font-bold font-mono tracking-wider text-slate-100 uppercase">
+              CUSTOMER 360 INTELLIGENCE
+            </h1>
+            <span className="text-2xs font-mono text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
+              BEHAVIORAL PROFILING
+            </span>
+          </div>
           <p className="text-xs text-slate-400 mt-0.5">
             Holistic identity resolution, multi-account velocity tracking, and hardware binding history.
           </p>
@@ -63,7 +68,7 @@ export const Customer360: React.FC<Customer360Props> = ({ onSelectTransaction })
                 onClick={() => setSelectedCustomerId(c.id)}
                 className={`w-full p-3 text-left transition-colors flex items-center justify-between ${
                   selectedCustomerId === c.id
-                    ? 'bg-blue-600/15 border-l-2 border-l-blue-500'
+                    ? 'bg-amber-500/15 border-l-2 border-l-amber-400'
                     : 'hover:bg-veyra-850/60'
                 }`}
               >
@@ -89,7 +94,7 @@ export const Customer360: React.FC<Customer360Props> = ({ onSelectTransaction })
               <div className="bg-veyra-900 border border-veyra-800/80 rounded p-4 space-y-3 font-mono text-2xs">
                 <div className="flex items-center justify-between border-b border-veyra-800 pb-2">
                   <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-blue-400" />
+                    <User className="w-4 h-4 text-amber-400" />
                     <span className="text-xs font-bold text-slate-100 uppercase">
                       {cust.first_name} {cust.last_name}
                     </span>
@@ -122,7 +127,7 @@ export const Customer360: React.FC<Customer360Props> = ({ onSelectTransaction })
                 {/* ACCOUNTS */}
                 <div className="bg-veyra-900 border border-veyra-800/80 rounded p-4 space-y-2">
                   <div className="flex items-center gap-1.5 text-xs font-bold font-mono text-slate-200 uppercase">
-                    <CreditCard className="w-3.5 h-3.5 text-blue-400" />
+                    <CreditCard className="w-3.5 h-3.5 text-amber-400" />
                     <span>LINKED ACCOUNTS ({customerDetail?.accounts?.length || 0})</span>
                   </div>
 
@@ -195,7 +200,7 @@ export const Customer360: React.FC<Customer360Props> = ({ onSelectTransaction })
                           onClick={() => onSelectTransaction(rt.id)}
                           className="hover:bg-veyra-850/60 cursor-pointer text-slate-300 transition-colors"
                         >
-                          <td className="py-2 px-2 text-blue-400">{rt.txn_reference}</td>
+                          <td className="py-2 px-2 text-amber-400">{rt.txn_reference}</td>
                           <td className="py-2 px-2 text-slate-500">{new Date(rt.timestamp).toLocaleTimeString('en-IN')}</td>
                           <td className="py-2 px-2 truncate max-w-[140px]">{rt.recipient_identifier}</td>
                           <td className="py-2 px-2 text-right font-medium text-slate-100">

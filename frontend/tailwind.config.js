@@ -38,18 +38,22 @@ export default {
           'critical-border': 'rgba(239, 68, 68, 0.25)',
         },
         accent: {
-          blue: '#3B82F6',
-          'blue-bg': 'rgba(59, 130, 246, 0.08)',
-          'blue-border': 'rgba(59, 130, 246, 0.25)',
-          lime: '#bef264',
-          'lime-glow': 'rgba(190, 242, 100, 0.25)',
+          amber: '#f59e0b',
+          'amber-glow': 'rgba(245, 158, 11, 0.25)',
+          'amber-bg': 'rgba(245, 158, 11, 0.08)',
+          'amber-border': 'rgba(245, 158, 11, 0.25)',
+          gold: '#fbbf24',
+          'gold-glow': 'rgba(251, 191, 36, 0.3)',
+          blue: '#f59e0b', // Aliased to amber so any legacy reference inherits warm tactical gold
+          'blue-bg': 'rgba(245, 158, 11, 0.08)',
+          'blue-border': 'rgba(245, 158, 11, 0.25)',
         },
-        lime: {
-          300: '#bef264',
-          400: '#a3e635',
-          500: '#84cc16',
-          600: '#65a30d',
-          accent: '#bbf246',
+        gold: {
+          300: '#fde68a',
+          400: '#fcd34d',
+          500: '#fbbf24',
+          600: '#f59e0b',
+          700: '#d97706',
         }
       },
       fontFamily: {
