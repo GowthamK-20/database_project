@@ -3,14 +3,32 @@
   "version": "1.0.0",
   "private": true,
   "description": "Veyra Risk // Enterprise Financial Risk & Fraud Intelligence Platform",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
+    "build:frontend": "npm run build --prefix frontend",
+    "build:api": "npx esbuild backend/src/serverless.ts --bundle --platform=node --target=node18 --outfile=api/index.js --external:pg --external:@electric-sql/pglite",
+    "build": "npm run build:frontend && npm run build:api",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "seed": "cd backend && npm run seed",
-    "test": "cd backend && npm run test",
-    "build": "npm run build --prefix backend && npm run build --prefix frontend"
+    "test": "cd backend && npm run test"
   },
-  "keywords": ["fintech", "fraud-detection", "risk-management", "postgresql", "dbms"],
+  "keywords": [
+    "fintech",
+    "fraud-detection",
+    "risk-management",
+    "postgresql",
+    "dbms"
+  ],
   "author": "Veyra Engineering",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "pg": "^8.13.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
 }
