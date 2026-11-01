@@ -28571,7 +28571,7 @@ var import_os = __toESM(require("os"));
 var import_dotenv = __toESM(require_main());
 var import_pg = __toESM(require("pg"));
 import_dotenv.default.config();
-var SUPABASE_FALLBACK_URL = "postgresql://postgres.owzmxyvdwdsdvqsgwxvf:Gowtham%40123@aws-1-eu-west-3.pooler.supabase.com:5432/postgres";
+var SUPABASE_FALLBACK_URL = "postgresql://postgres.owzmxyvdwdsdvqsgwxvf:Gowtham%40123@aws-1-eu-west-3.pooler.supabase.com:6543/postgres";
 var DatabaseManager = class {
   pgPool = null;
   pgliteInstance = null;
@@ -28579,15 +28579,20 @@ var DatabaseManager = class {
   mode = "PGLITE";
   async init() {
     if (this.isInitialized) return;
-    const databaseUrl = process.env.DATABASE_URL || SUPABASE_FALLBACK_URL;
+    let databaseUrl = process.env.DATABASE_URL || SUPABASE_FALLBACK_URL;
+    if (databaseUrl.includes("supabase.com") && databaseUrl.includes(":5432")) {
+      databaseUrl = databaseUrl.replace(":5432", ":6543");
+    }
     if (databaseUrl) {
       try {
         console.log("[DB] Connecting to PostgreSQL instance via DATABASE_URL...");
+        const isSslNeeded = databaseUrl.includes("supabase") || process.env.NODE_ENV === "production" || !!process.env.VERCEL;
         this.pgPool = new import_pg.default.Pool({
           connectionString: databaseUrl,
-          max: 10,
-          idleTimeoutMillis: 3e4,
-          connectionTimeoutMillis: 5e3
+          ssl: isSslNeeded ? { rejectUnauthorized: false } : void 0,
+          max: 2,
+          idleTimeoutMillis: 1e4,
+          connectionTimeoutMillis: 1e4
         });
         await this.pgPool.query("SELECT 1");
         this.mode = "NATIVE_PG";
@@ -28666,6 +28671,9 @@ var DatabaseManager = class {
         }
       } catch (e) {
       }
+    }
+    if (process.env.VERCEL) {
+      return;
     }
     console.log("[DB] Checking and applying database migrations...");
     const possibleDirs = [

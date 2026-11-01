@@ -6,7 +6,7 @@ import pg from 'pg';
 
 dotenv.config();
 
-const SUPABASE_FALLBACK_URL = 'postgresql://postgres.owzmxyvdwdsdvqsgwxvf:Gowtham%40123@aws-1-eu-west-3.pooler.supabase.com:5432/postgres';
+const SUPABASE_FALLBACK_URL = 'postgresql://postgres.owzmxyvdwdsdvqsgwxvf:Gowtham%40123@aws-1-eu-west-3.pooler.supabase.com:6543/postgres';
 
 export interface QueryResult<T = any> {
   rows: T[];
@@ -22,16 +22,22 @@ class DatabaseManager {
   async init(): Promise<void> {
     if (this.isInitialized) return;
 
-    const databaseUrl = process.env.DATABASE_URL || SUPABASE_FALLBACK_URL;
+    let databaseUrl = process.env.DATABASE_URL || SUPABASE_FALLBACK_URL;
+    // Serverless platforms like Vercel require transaction pooler on port 6543 to avoid EMAXCONNSESSION
+    if (databaseUrl.includes('supabase.com') && databaseUrl.includes(':5432')) {
+      databaseUrl = databaseUrl.replace(':5432', ':6543');
+    }
 
     if (databaseUrl) {
       try {
         console.log('[DB] Connecting to PostgreSQL instance via DATABASE_URL...');
+        const isSslNeeded = databaseUrl.includes('supabase') || process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
         this.pgPool = new pg.Pool({
           connectionString: databaseUrl,
-          max: 10,
-          idleTimeoutMillis: 30000,
-          connectionTimeoutMillis: 5000,
+          ssl: isSslNeeded ? { rejectUnauthorized: false } : undefined,
+          max: 2,
+          idleTimeoutMillis: 10000,
+          connectionTimeoutMillis: 10000,
         });
         await this.pgPool.query('SELECT 1');
         this.mode = 'NATIVE_PG';
@@ -121,6 +127,11 @@ class DatabaseManager {
       } catch (e) {
         // proceed with migrations if check fails
       }
+    }
+
+    if (process.env.VERCEL) {
+      // In Vercel serverless environment, database is already migrated in Supabase
+      return;
     }
 
     console.log('[DB] Checking and applying database migrations...');
